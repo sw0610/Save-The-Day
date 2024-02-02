@@ -1,5 +1,6 @@
 package com.savetheday.backend.db.entity;
 
+import com.savetheday.backend.dto.request.DailyTaskReq;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,12 +20,12 @@ import java.time.LocalDateTime;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long TaskId;
+    private Long taskId;
 
-//    @Co
-//    private Long userId;
+    @Column(name="member_id")
+    private Long memberId;
     @ManyToOne
-    @JoinColumn(name="user_id", insertable = false, updatable = false)
+    @JoinColumn(name="member_id", insertable = false, updatable = false)
     private Member member;
 
     @Column(nullable = false, length = 30)
@@ -34,19 +35,30 @@ public class Task {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDate due_date;
+    private LocalDate dueDate;
 
-    @Column(nullable = false, length = 10)
-    private String status;
+    @Column(nullable = false, length = 15)
+    private String processStatus;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 15)
     private String importance;
 
-    @Column(length = 10)
+    @Column(length = 15)
     private String emotion;
+
+    public static Task toTask(Long memberId, DailyTaskReq dailyTaskReq){
+        return Task.builder()
+                .memberId(memberId)
+                .title(dailyTaskReq.getTitle())
+                .content(dailyTaskReq.getContent())
+                .dueDate(dailyTaskReq.getDueDate())
+                .processStatus("not started")
+                .importance(dailyTaskReq.getImportance())
+                .build();
+    }
 
 
 }
