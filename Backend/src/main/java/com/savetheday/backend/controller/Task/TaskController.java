@@ -46,6 +46,12 @@ public class TaskController {
         return ResponseEntity.ok(taskId);
     }
 
+    @DeleteMapping("/detail/{taskId}")
+    public ResponseEntity<String> deleterTask(HttpServletRequest request, @PathVariable Long taskId){
+        taskService.deleteTask(taskId);
+        return ResponseEntity.ok("SUCCESS");
+    }
+
 
 
 

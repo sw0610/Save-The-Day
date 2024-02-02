@@ -12,4 +12,6 @@ public interface TaskService {
     TaskDetailRes getTaskDetail(Long taskId);
     void createTask(Long memberId, DailyTaskReq dailyTaskReq);
     void updateTaskDetail(Long taskId, DailyTaskReq dailyTaskReq);
+
+    void deleteTask(Long taskId);
 }

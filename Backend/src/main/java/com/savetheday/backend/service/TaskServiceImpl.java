@@ -76,4 +76,9 @@ public class TaskServiceImpl implements TaskService{
         task.updateTask(dailyTaskReq);
     }
 
+    @Override
+    public void deleteTask(Long taskId) {
+        taskRepository.deleteById(taskId);
+    }
+
 }
