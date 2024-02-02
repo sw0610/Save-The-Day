@@ -56,7 +56,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskDetailRes getTaskDetail(Long taskId) {
 
-        TaskDetailRes taskDetailRes = taskRepository.findByTaskId(taskId)
+        TaskDetailRes taskDetailRes = taskRepository.findById(taskId)
                 .map(TaskDetailRes::toTaskDetailRes)
                 .orElseThrow(()-> new BadRequestException("해당하는 task가 없습니다"));
 
@@ -65,10 +65,15 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public void createTask(Long memberId, DailyTaskReq dailyTaskReq) {
-        System.out.println(dailyTaskReq);
-
         taskRepository.save(Task.toTask(memberId, dailyTaskReq));
+    }
 
+    @Override
+    public void updateTaskDetail(Long taskId, DailyTaskReq dailyTaskReq) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(()->new BadRequestException("해당 task가 없습니다"));
+
+        task.updateTask(dailyTaskReq);
     }
 
 }
