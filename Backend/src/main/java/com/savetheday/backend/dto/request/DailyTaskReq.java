@@ -15,5 +15,7 @@ public class DailyTaskReq {
     private String title;
     private LocalDate dueDate;
     private String importance;
+    private String processStatus;
     private String content;
+    private String emotion;
 }

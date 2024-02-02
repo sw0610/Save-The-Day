@@ -49,15 +49,24 @@ public class Task {
     @Column(length = 15)
     private String emotion;
 
-    public static Task toTask(Long memberId, DailyTaskReq dailyTaskReq){
+    public static Task toTask(Long memberId, DailyTaskReq req){
         return Task.builder()
                 .memberId(memberId)
-                .title(dailyTaskReq.getTitle())
-                .content(dailyTaskReq.getContent())
-                .dueDate(dailyTaskReq.getDueDate())
+                .title(req.getTitle())
+                .content(req.getContent())
+                .dueDate(req.getDueDate())
                 .processStatus("not started")
-                .importance(dailyTaskReq.getImportance())
+                .importance(req.getImportance())
                 .build();
+    }
+
+    public void updateTask(DailyTaskReq req){
+        this.title = req.getTitle();
+        this.content = req.getContent();
+        this.dueDate = req.getDueDate();
+        this.processStatus = req.getProcessStatus();
+        this.importance = req.getImportance();
+        this.emotion = req.getEmotion();
     }
 
 

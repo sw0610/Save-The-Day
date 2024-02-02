@@ -38,5 +38,16 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskDetail(id));
     }
 
+    @PutMapping("/detail/{taskId}")
+    public ResponseEntity<Long> updateTaskDetail(HttpServletRequest request, @PathVariable Long taskId, @RequestBody DailyTaskReq dailyTaskReq){
+
+        taskService.updateTaskDetail(taskId, dailyTaskReq);
+
+        return ResponseEntity.ok(taskId);
+    }
+
+
+
+
 
 }
