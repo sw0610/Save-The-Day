@@ -19,25 +19,25 @@
     }
 
     #header{
-        height: 120px;
+        height: 70px;
     }
     #titleBar{
-        position: relative;
+        /* position: relative; */
+        padding-top: 16px;
     }
 
     #menu{
         /* position: absolute;
         padding-top: 30px; */
         /* padding-top: 30; */
-    
+
 
     }
 
     #title{
         /* position: absolute; */
         text-align: center;
-        padding-top: 30px;
-        font-size: 20px;
+        font-size: 18px;
         font-family: 'Noto Sans', sans-serif;
         font-weight: 400;
         color: #FFFFFF;
