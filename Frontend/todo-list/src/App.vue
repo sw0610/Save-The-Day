@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <Task-App></Task-App>
-  </div>
+    <!-- <Task-App></Task-App> -->
+    <router-view></router-view>
+</div>
 </template>
 
 <script>
-import TaskApp from './views/TaskApp.vue'
+// import TaskApp from './views/TaskApp.vue'
 
-export default {
-  name: 'App',
-  components: {
-    "Task-App":TaskApp
-  }
-}
+// export default {
+//   name: 'App',
+//   components: {
+//     "Task-App":TaskApp
+//   }
+// }
 </script>
 
 <style>
@@ -24,4 +25,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 } */
+
 </style>
