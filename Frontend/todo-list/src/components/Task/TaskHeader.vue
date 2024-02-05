@@ -2,8 +2,9 @@
 
     <div class="header" id="header">
         <div id="titleBar">
-            <div id="menu">button</div>
+            <img id="menu" src="../../assets/icon/menu_bar.svg">
             <div id="title">Todo List</div>
+
         </div>
     </div>
 </template>
@@ -14,34 +15,56 @@
 <style scoped>
     .header{
         background-color: #FFBAB5;
-        padding-left: 32px;        
-        padding-right: 32px;
+        /* padding-left: 32px;        
+        padding-right: 32px; */
+        display: grid;
+        justify-items: center;
+        align-items: center;
+
     }
 
     #header{
         height: 70px;
     }
-    #titleBar{
-        /* position: relative; */
-        padding-top: 16px;
-    }
 
-    #menu{
+
+    /* #menu{ */
         /* position: absolute;
         padding-top: 30px; */
         /* padding-top: 30; */
+        /* justify-self: start;
 
 
-    }
+    } */
+    /* #title {
+    text-align: center;
+    font-size: 18px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    color: #FFFFFF;
+    } */
 
-    #title{
-        /* position: absolute; */
-        text-align: center;
-        font-size: 18px;
-        font-family: 'Noto Sans', sans-serif;
-        font-weight: 400;
-        color: #FFFFFF;
-        /* display: inline-block; */
-    }
+    #titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+#menu {
+    position: absolute;
+    left: 32px;
+}
+
+#title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 18px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
 
 </style>
