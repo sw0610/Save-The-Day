@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import TaskApp from '../views/TaskApp'
-import TaskDetail from '../views/TaskDetail'
+import TaskDetail from '../views/TaskDetailApp'
 
 const routes = [
     {
