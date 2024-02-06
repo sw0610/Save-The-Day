@@ -1,7 +1,7 @@
 <template>
     <div id="newTask">
         <div>
-            <button id="newTaskBtn">
+            <button id="newTaskBtn"  @click="goToNewTaskPage">
                 <img src="../../assets/icon/plus_icon.svg" id="btnImage" alt="button image">
                 Add New Task
             </button>
@@ -9,7 +9,13 @@
     </div>
 </template>
 <script>
-
+export default {
+    methods: {
+        goToNewTaskPage() {
+            this.$router.push('/detail');
+        }
+    }
+};
 </script>
 <style scoped>
     #newTask{
