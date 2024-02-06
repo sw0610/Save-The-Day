@@ -15,11 +15,16 @@
         <div class="weekday-name" v-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']" :key="day">
           {{ day }}
         </div>
-      </div>
+      </div>                                                                                              
       <div class="calendar-days">
-        <div v-for="day in days" :class="day.class" :key="day.id">
+        <div v-for="day in days" :id="'day-' + day.id" 
+        :class="[day.class, { 'selected-day': day.year === selectedDay.year&& day.month===selectedDay.month && day.date===selectDate.date }]" 
+        :key="day.id" @click="selectDate(day)">
           {{ day.date }}
         </div>
+        <!-- <div v-for="day in days" :id="'day-' + day.id" :class="[day.class, { 'selected-day': day === selectedDay }]" :key="day.id" @click="selectDate(day)">
+        {{ day.date }}
+      </div> -->
       </div>
     </div>
     <div class="goto-buttons">
@@ -37,7 +42,12 @@ export default {
     return {
       today: new Date(),
       date: new Date(),
-      days: []
+      days: [],
+      selectedDate: {
+        year:new Date().getFullYear(),
+        month:new Date().getMonth(),
+        date: new Date().getDate()        
+      }
     };
   },
   computed: {
@@ -47,29 +57,25 @@ export default {
   },
   methods: {
     renderCalendar() {
-      const prevLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
-      const totalMonthDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
-      const startWeekDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
-      let totalCalendarDay = 42; // 6 weeks
+      const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+      const lastDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+
+      const startWeekDay = firstDay.getDay();
+      const totalMonthDay = lastDay.getDate();
 
       this.days = [];
 
-      for (let i = 0; i < totalCalendarDay; i++) {
-        let day = i - startWeekDay + 1;
-        let date = new Date(this.date.getFullYear(), this.date.getMonth(), day);
-        if (i < startWeekDay) {
-          // previous month
-          date = new Date(this.date.getFullYear(), this.date.getMonth(), day);
-          this.days.push({ id: i, date: prevLastDay - startWeekDay + i + 1, class: 'padding-day' });
-        } else if (i >= startWeekDay + totalMonthDay) {
-          // next month
-          date = new Date(this.date.getFullYear(), this.date.getMonth() + 1, day - totalMonthDay);
-          this.days.push({ id: i, date: day - totalMonthDay, class: 'padding-day' });
-        } else {
-          // current month
-          let dayClass = this.today.getTime() === date.getTime() ? 'current-day' : 'month-day';
-          this.days.push({ id: i, date: day, class: dayClass });
-        }
+      // Add empty slots for previous month
+      for (let i = 0; i < startWeekDay; i++) {
+        // let prevLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
+        this.days.push({ id: i, date: ' ', class: 'padding-day' });
+      }
+
+      // Add days of current month
+      for (let i = 1; i <= totalMonthDay; i++) {
+        let date = new Date(this.date.getFullYear(), this.date.getMonth(), i);
+        let dayClass = this.today.getTime() === date.getTime() ? 'current-day' : 'month-day';
+        this.days.push({ id: startWeekDay + i - 1, year:this.date.getFullYear(), month: this.date.getMonth(), date: i, class: dayClass });
       }
     },
     changeMonth(diff) {
@@ -86,17 +92,38 @@ export default {
     goToToday() {
       this.date = new Date();
       this.renderCalendar();
+    },
+    selectDate(day) {
+      console.log("day", day);
+      console.log(this.selectedDate);
+      // this.selectedDate = new Date(this.date.getFullYear(), this.date.getMonth(), day.date);
+      this.selectDate.year=this.date.getFullYear();
+      this.selectDate.month=this.date.getMonth();
+      this.selectDate.date=day.date;
     }
+//     selectDate(day) {
+//   this.selectedDay = day;
+//   this.selectedDate = new Date(this.date.getFullYear(), this.date.getMonth(), day.date);
+// }
 
       },
       created() {
         this.renderCalendar();
+        // Find today in the days array
+        const today = this.days.find(day => day.date === this.today.getDate());
+        console.log("today33", this.date);
+        // Select today
+        if (today) {
+          this.selectDate.year=today.getFullYear();
+          this.selectDate.month=today.getMonth();
+          this.selectDate.date=today.getDate();
+        }
+        console.log("{{today}}", this.selectedDate);
       }
     };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -110,7 +137,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Noto Sans", sans-serif;
   user-select: none;
 }
 
@@ -143,7 +170,7 @@ export default {
   text-align: center;
   line-height: 40px;
   font-size: 14px;
-  color: #19181a;
+  color: #1B1C1F;
   background: #f8f7fa;
   border: none;
   border-radius: 15px;
@@ -166,7 +193,7 @@ export default {
 [class$="-day"] {
   width: 40px;
   height: 40px;
-  color: #19181a;
+  color: #1B1C1F;
   text-align: center;
   line-height: 40px;
   font-weight: 500;
@@ -174,12 +201,12 @@ export default {
 }
 
 .weekday-name {
-  color: #19181a;
+  color: #1B1C1F;
   font-weight: 700;
 }
 
 .current-day {
-  background-color: rgb(112, 71, 235);
+  background-color: #F19F9D;
   color: #f8f7fa;
   border-radius: 15px;
   font-weight: 700;
@@ -197,17 +224,19 @@ export default {
 .btn:hover {
   border-radius: 15px;
   background-color: #f8f7fa;
-  color: rgb(112, 71, 235);
+  color: #F19F9D;
   transition: 0.1s;
   cursor: pointer;
-  box-shadow: inset 0px 0px 0px 1.5px rgb(112, 71, 235);
+  box-shadow: inset 0px 0px 0px 1.5px #F19F9D;
+  background-color: #F19F9D;
+  color: #f8f7fa;
 }
 
 .calendar-toolbar > [class$="month-btn"]:focus,
 .month-day:focus,
 .btn:focus {
   border-radius: 15px;
-  background-color: rgb(112, 71, 235);
+  background-color: #F19F9D;
   color: #f8f7fa;
 }
 
@@ -224,10 +253,16 @@ export default {
   border-radius: 15px;
   padding: 11px 13px;
   color: #19181a;
-  font-family: "Quicksand", sans-serif;
-  font-weight: 600;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 500;
   font-size: 0.9rem;
   margin-right: 1px;
   box-shadow: 0px 0px 0px #efefef;
 }
+
+.selected-day {
+  background-color: #F19F9D; /* 원하는 색상으로 바꿔주세요 */
+  color: #ffffff; /* 글자색도 원하시는 색상으로 변경하세요 */
+}
+/* https://www.codewithfaraz.com/content/97/learn-how-to-build-a-dynamic-calendar-with-html-css-and-javascript */
 </style>
