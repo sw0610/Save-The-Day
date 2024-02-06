@@ -2,14 +2,20 @@
 
     <div class="header" id="header">
         <div id="titleBar">
-            <img id="menu" src="../../assets/icon/left_icon.svg">
+            <img id="menu" src="../../assets/icon/left_icon.svg" @click="goBack">
             <div id="title">Todo</div>
 
         </div>
     </div>
 </template>
 <script>
-
+export default {
+    methods: {
+        goBack() {
+            this.$router.push('/');
+        }
+    }
+};
 
 </script>
 <style scoped>
