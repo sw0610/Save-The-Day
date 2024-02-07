@@ -1,130 +1,140 @@
 <template>
   <div id="monthlyCalendar">
-  <div class="card">
-    <div class="calendar-toolbar">
-      <button class="prev month-btn" @click="changeMonth(-1)">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <div class="current-month">{{ currentMonth }}</div>
-      <button class="next month-btn" @click="changeMonth(1)">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-    </div>
-    <div class="calendar">
-      <div class="weekdays">
-        <div class="weekday-name" v-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']" :key="day">
-          {{ day }}
+    <div class="card">
+      <div class="calendar-toolbar">
+        <button class="prev month-btn" @click="changeMonth(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="current-month">{{ currentMonth }}</div>
+        <button class="next month-btn" @click="changeMonth(1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="calendar">
+        <div class="weekdays">
+          <div
+            class="weekday-name"
+            v-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"
+            :key="day"
+          >
+            {{ day }}
+          </div>
         </div>
-      </div>                                                                                              
-      <div class="calendar-days">
-        <div v-for="day in days" :id="'day-' + day.id" 
-        :class="[day.class, { 'selected-day': day.year === selectedDay.year&& day.month===selectedDay.month && day.date===selectDate.date }]" 
-        :key="day.id" @click="selectDate(day)">
-          {{ day.date }}
+        <div class="calendar-days">
+          <div v-for="(item, index) in days" :key="index">
+          <div
+          @click="selectDay(item)"
+
+            v-if="item.date"
+            :id="'day-' + item.id" 
+            :class="[item.class, {
+              'selected-day': item.date.getFullYear() === selectedDate.getFullYear() && item.date.getMonth() === selectedDate.getMonth() && item.date.getDate() === selectedDate.getDate(),
+            }]"
+          >
+            {{ item.day }}
+          </div>
+            <div v-else-if="days.filter(day => day.date===null).length !== 7" class="padding-day">
+              {{ item.day }}
+            </div>
+          </div>
         </div>
-        <!-- <div v-for="day in days" :id="'day-' + day.id" :class="[day.class, { 'selected-day': day === selectedDay }]" :key="day.id" @click="selectDate(day)">
-        {{ day.date }}
-      </div> -->
+      </div>
+      <div class="goto-buttons">
+        <button type="button" class="btn prev-year" @click="goToYear(-1)">
+          Prev Year
+        </button>
+        <button type="button" class="btn today" @click="goToToday">
+          Today
+        </button>
+        <button type="button" class="btn next-year" @click="goToYear(1)">
+          Next Year
+        </button>
       </div>
     </div>
-    <div class="goto-buttons">
-      <button type="button" class="btn prev-year" @click="goToYear(-1)">Prev Year</button>
-      <button type="button" class="btn today" @click="goToToday">Today</button>
-      <button type="button" class="btn next-year" @click="goToYear(1)">Next Year</button>
-    </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      today: new Date(),
       date: new Date(),
+      selectedDate: new Date(),
+      today: new Date(),
       days: [],
-      selectedDate: {
-        year:new Date().getFullYear(),
-        month:new Date().getMonth(),
-        date: new Date().getDate()        
-      }
     };
   },
+
   computed: {
     currentMonth() {
-      return this.date.toLocaleDateString("en-US", {month:'long', year:'numeric'});
-    }
+      return this.date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+      
+    },
   },
   methods: {
-    renderCalendar() {
-      const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
-      const lastDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
-
-      const startWeekDay = firstDay.getDay();
-      const totalMonthDay = lastDay.getDate();
-
-      this.days = [];
-
-      // Add empty slots for previous month
-      for (let i = 0; i < startWeekDay; i++) {
-        // let prevLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
-        this.days.push({ id: i, date: ' ', class: 'padding-day' });
-      }
-
-      // Add days of current month
-      for (let i = 1; i <= totalMonthDay; i++) {
-        let date = new Date(this.date.getFullYear(), this.date.getMonth(), i);
-        let dayClass = this.today.getTime() === date.getTime() ? 'current-day' : 'month-day';
-        this.days.push({ id: startWeekDay + i - 1, year:this.date.getFullYear(), month: this.date.getMonth(), date: i, class: dayClass });
-      }
-    },
-    changeMonth(diff) {
-      this.date.setMonth(this.date.getMonth() + diff);
+    changeMonth(num) {
+      this.date.setMonth(this.date.getMonth() + num);
       this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
       this.currentMonth = this.date.toLocaleDateString("en-US", {month:'long', year:'numeric'});
       this.renderCalendar();
-
     },
-    goToYear(diff) {
-      this.date = new Date(this.date.getFullYear() + diff, this.date.getMonth(), this.date.getDate());
+    navigateYear(num) {
+      this.date.setFullYear(this.date.getFullYear() + num);
       this.renderCalendar();
     },
-    goToToday() {
+    navigateToday() {
       this.date = new Date();
+      this.selectedDay = this.today;
       this.renderCalendar();
     },
-    selectDate(day) {
-      console.log("day", day);
-      console.log(this.selectedDate);
-      // this.selectedDate = new Date(this.date.getFullYear(), this.date.getMonth(), day.date);
-      this.selectDate.year=this.date.getFullYear();
-      this.selectDate.month=this.date.getMonth();
-      this.selectDate.date=day.date;
-    }
-//     selectDate(day) {
-//   this.selectedDay = day;
-//   this.selectedDate = new Date(this.date.getFullYear(), this.date.getMonth(), day.date);
-// }
+    selectDay(day) {
 
-      },
-      created() {
-        this.renderCalendar();
-        // Find today in the days array
-        const today = this.days.find(day => day.date === this.today.getDate());
-        console.log("today33", this.date);
-        // Select today
-        if (today) {
-          this.selectDate.year=today.getFullYear();
-          this.selectDate.month=today.getMonth();
-          this.selectDate.date=today.getDate();
-        }
-        console.log("{{today}}", this.selectedDate);
+      if (day && day.date) {
+        this.selectedDate = day.date;
       }
-    };
+    },
+
+    renderCalendar() {
+      const totalMonthDay = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth() + 1,
+        0
+      ).getDate();
+      const startWeekDay = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth(),
+        0
+      ).getDay();
+
+      this.days = [];
+      let totalCalendarDay = 6 * 7;
+      for (let i = 0; i < totalCalendarDay; i++) {
+        let day = i - startWeekDay;
+        if (i <= startWeekDay) {
+          this.days.push({ day: ' ', date: null });
+        } else if (i <= startWeekDay + totalMonthDay) {
+          let date = new Date(this.date.getFullYear(), this.date.getMonth(), i);
+          let dayClass = this.today.getTime() === date.getTime() ? 'current-day' : 'month-day';
+          this.days.push({
+            id: startWeekDay + i - 1,
+            day,
+            date: new Date(this.date.getFullYear(), this.date.getMonth(), day),
+            class: dayClass
+          });
+        }
+      }
+    },
+  },
+  mounted() {
+    this.renderCalendar();
+  },
+};
 </script>
 
 <style scoped>
-
 * {
   margin: 0;
   padding: 0;
@@ -132,8 +142,12 @@ export default {
 
 #monthlyCalendar {
   height: 100vh;
-  background: rgb(238,174,202);
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  background: rgb(238, 174, 202);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,7 +158,7 @@ export default {
 .card {
   width: 316px;
   height: fit-content;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0px 0px 10px #efefef;
 }
@@ -170,7 +184,7 @@ export default {
   text-align: center;
   line-height: 40px;
   font-size: 14px;
-  color: #1B1C1F;
+  color: #1b1c1f;
   background: #f8f7fa;
   border: none;
   border-radius: 15px;
@@ -193,7 +207,7 @@ export default {
 [class$="-day"] {
   width: 40px;
   height: 40px;
-  color: #1B1C1F;
+  color: #1b1c1f;
   text-align: center;
   line-height: 40px;
   font-weight: 500;
@@ -201,12 +215,12 @@ export default {
 }
 
 .weekday-name {
-  color: #1B1C1F;
+  color: #1b1c1f;
   font-weight: 700;
 }
 
 .current-day {
-  background-color: #F19F9D;
+  background-color: #f19f9d;
   color: #f8f7fa;
   border-radius: 15px;
   font-weight: 700;
@@ -224,19 +238,19 @@ export default {
 .btn:hover {
   border-radius: 15px;
   background-color: #f8f7fa;
-  color: #F19F9D;
+  color: #f19f9d;
   transition: 0.1s;
   cursor: pointer;
-  box-shadow: inset 0px 0px 0px 1.5px #F19F9D;
-  background-color: #F19F9D;
-  color: #f8f7fa;
+  box-shadow: inset 0px 0px 0px 1.5px #f19f9d;
+  background-color: transparent;
+  color: #1b1c1f;
 }
 
 .calendar-toolbar > [class$="month-btn"]:focus,
 .month-day:focus,
 .btn:focus {
   border-radius: 15px;
-  background-color: #F19F9D;
+  background-color: #f19f9d;
   color: #f8f7fa;
 }
 
@@ -261,7 +275,8 @@ export default {
 }
 
 .selected-day {
-  background-color: #F19F9D; /* 원하는 색상으로 바꿔주세요 */
+  background-color: #f19f9d; /* 원하는 색상으로 바꿔주세요 */
+  border-radius: 15px;
   color: #ffffff; /* 글자색도 원하시는 색상으로 변경하세요 */
 }
 /* https://www.codewithfaraz.com/content/97/learn-how-to-build-a-dynamic-calendar-with-html-css-and-javascript */
