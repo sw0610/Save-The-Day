@@ -41,13 +41,13 @@
         </div>
       </div>
       <div class="goto-buttons">
-        <button type="button" class="btn prev-year" @click="goToYear(-1)">
+        <button type="button" class="btn prev-year" @click="navigateYear(-1)">
           Prev Year
         </button>
         <button type="button" class="btn today" @click="goToToday">
           Today
         </button>
-        <button type="button" class="btn next-year" @click="goToYear(1)">
+        <button type="button" class="btn next-year" @click="navigateYear(1)">
           Next Year
         </button>
       </div>
@@ -60,8 +60,8 @@ export default {
   props:['showDate'],
   data() {
     return {
-      date: new Date(),
-      selectedDate: this.showDate,
+      selectedDate: new Date(this.showDate),
+      date: new Date(this.showDate),
       today: new Date(),
       days: [],
     };
@@ -83,13 +83,28 @@ export default {
     },
 
     changeMonth(num) {
+      console.log("0",this.selectedDate);
+      console.log("0",this.showDate);
+
       this.date.setMonth(this.date.getMonth() + num);
-      this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
+      console.log("1",this.selectedDate);
+      console.log("0",this.showDate);
+
       this.currentMonth = this.date.toLocaleDateString("en-US", {month:'long', year:'numeric'});
+      console.log("2",this.selectedDate);
+      console.log("0",this.showDate);
+
+      this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
+      console.log("3",this.selectedDate);
+      console.log("0",this.showDate);
+
       this.renderCalendar();
+      console.log("4",this.selectedDate);
+      console.log("0",this.showDate);
+
     },
-    navigateYear(num) {
-      this.date.setFullYear(this.date.getFullYear() + num);
+    navigateYear(diff) {
+      this.date = new Date(this.date.getFullYear() + diff, this.date.getMonth(), this.date.getDate());
       this.renderCalendar();
     },
     navigateToday() {
