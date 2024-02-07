@@ -57,14 +57,16 @@
 
 <script>
 export default {
+  props:['showDate'],
   data() {
     return {
       date: new Date(),
-      selectedDate: new Date(),
+      selectedDate: this.showDate,
       today: new Date(),
       days: [],
     };
   },
+
 
   computed: {
     currentMonth() {
@@ -77,7 +79,6 @@ export default {
   },
   methods: {   
     closeCalendar(){
-      this.$emit('closeCalendar');
       this.$emit('selectedDate', this.selectedDate);
     },
 

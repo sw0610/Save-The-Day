@@ -1,169 +1,206 @@
 <template>
-    <div id="weekly">
-        <div id="buttons">
-            <MonthlyCalendar v-if="displayCalendar" @closeCalendar="displayCalendar=false" @selectedDate="dateSelect"/>
-            <button id="calendar" @click="displayCalendar=true">
-                Feb 14
-                <img src="../../assets/icon/calendar_drop.svg" id="calendarBtn">
-            </button>
-            <button id="today">Today</button>
-        </div>
-        <div id="weeklyCalender">
-            <!-- <div class="day" v-for="day in days" :key="day.id"  >{{ day }}</div>
-            <div class="date" v-for="date in dates" :key="date.id" >{{ date }}</div> -->
-            <div id="calendarItem" v-for="item in zippedData" :key="item.day">
-                <div class="calendarRow">
-                    <div class="day" >{{ item.day }}</div>
-                </div>
-                <div class="calendarRow">
-                    <div class="date">{{ item.date }}</div>
-                </div>
-            </div>
-
-        </div>
+  <div id="weekly">
+    <div id="buttons">
+      <MonthlyCalendar
+        v-if="displayCalendar"
+        :showDate=selectedDate
+        @closeCalendar="handleCloseCalendar"
+        @selectedDate="dateSelect"
+      />
+      <button id="calendar" @click="displayCalendar=true">
+        {{ getMonthName(selectedDate.getMonth()) }} {{ selectedDate.getDate() }}
+        <img src="../../assets/icon/calendar_drop.svg" id="calendarBtn" />
+      </button>
+      <button id="today" @click="setToday">Today</button>
     </div>
+    <div id="weeklyCalender">
+      <!-- <div class="day" v-for="day in days" :key="day.id"  >{{ day }}</div>
+            <div class="date" v-for="date in dates" :key="date.id" >{{ date }}</div> -->
+      <div id="calendarItem" v-for="item in zippedData" :key="item.day">
+        <div class="calendarRow">
+          <div class="day">{{ item.day }}</div>
+        </div>
+        <div class="calendarRow">
+          <div class="date">{{ item.date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { ref } from 'vue';
-import MonthlyCalendar from './MonthlyCalendar.vue';
+// import { ref } from "vue";
+import MonthlyCalendar from "./MonthlyCalendar.vue";
 
 export default {
-    components:{
-        MonthlyCalendar
-    },
-    data() {
-        return {
-            displayCalendar: false,
-            selectedDate:new Date()
-        };
-    },
-    setup() {
-        const days = ref(['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"]);
-        const dates = ref(['4', '5', "6", "7", "8", "9", "10"]);
+  components: {
+    MonthlyCalendar,
+  },
+  data() {
+    return {
+      displayCalendar: false,
+      selectedDate: new Date(),
+      dates : ["4", "5", "6", "7", "8", "9", "10"]
 
-        const zippedData = ref(days.value.map((day, index) => ({ day, date: dates.value[index] })));
+    };
+  },
+//   setup() {
+//     const days = ref(["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]);
+//     const zippedData = ref(
+//       days.value.map((day, index) => ({ day, date: this.dates.value[index] }))
+//     );
 
-        return {
-            zippedData
-        }
-        },
-        methods: {
-        dateSelect(data) {
-            console.log(data);
+//     return {
+//       zippedData,
+//     };
+//   },
+  methods: {
+    dateSelect(data) {
+        
+      this.selectedDate = data;
+      console.log(this.selectedDate);
+      this.displayCalendar = false;
+        this.updateWeek();
+        console.log("date", this.selectedDate);
+        console.log("dates", this.dates);
+        console.log(this.dates[1]);
+    },
+    setToday() {
+      this.selectedDate = new Date();
+    },
+    getMonthName(month) {
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"
+                        ];
+        return monthNames[month];
+    },
+    getWeekRange(date) {
+        const start = date.getDate() - date.getDay(); // 주의 시작 (일요일)
+        const end = start + 6; // 주의 끝 (토요일)
+
+        const weekStart = new Date(date.getFullYear(), date.getMonth(), start);
+        const weekEnd = new Date(date.getFullYear(), date.getMonth(), end);
+
+        return { start: weekStart, end: weekEnd };
+    },
+    
+    updateWeek() {
+        const { start, end } = this.getWeekRange(this.selectedDate);
+        this.dates = [];
+        for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+            this.dates.push(date.getDate().toString());
         }
     },
-    created() {
-        if(this.$route.params.selectedDate) {
-            // this.selectedDate = this.$route.params.selectedDate;
-            console.log(this.selectedDate);
-        }
+
+  },
+  created() {
+    if (this.$route.params.selectedDate) {
+      // this.selectedDate = this.$route.params.selectedDate;
+      console.log(this.selectedDate);
     }
+  },
+  computed: {
+    zippedData() {
+        const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        return days.map((day, index) => ({ day, date: this.dates[index] }));
+    },
+
+    },
+    mounted() {
+        console.log(this.dates);
+        this.updateWeek();
+    },
+
 };
-
-
-
-
 </script>
 <style scoped>
+#weekly {
+  background-color: #ffbab5;
+  height: 136px;
+  margin: 0;
+  padding: 0 24px;
+  position: relative;
+}
+#buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    #weekly{
-        background-color: #FFBAB5;
-        height: 136px;
-        margin:0;
-        padding: 0 24px;
-        position: relative; 
-        
-    }
-    #buttons{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    button{
-        margin-top: 16px;
-        font-family: 'Noto Sans', sans-serif;
-        font-weight: 500;
-
-
-    }
-    #calendar{
-        font-size: 16px;
-        color: #1B1C1F;
-        padding-top:3px;
-        border: 0;
-        background-color: transparent;
-        display: flex; /* Add this line */
-        align-items: center; 
-    }
-    #today{
-        border: 0;
-        background: #FFFFFF;
-        border-radius: 16px;
-        padding:3px 5px;
-        font-size: 14px;
-        color: #F19F9D;
-        float: right;
-    }
-    #weeklyCalender {
-        /* display: flex; */
-        /* justify-content: space-between; */
-        /* position: absolute; */
-        box-sizing: border-box;
-        margin-top: 16px;
-        /* border: 1px solid black; */
-        /* border-color: #1B1C1F; */
-        /* margin-left: 5px;
+button {
+  margin-top: 16px;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 500;
+}
+#calendar {
+  font-size: 16px;
+  color: #1b1c1f;
+  padding-top: 3px;
+  border: 0;
+  background-color: transparent;
+  display: flex; /* Add this line */
+  align-items: center;
+}
+#today {
+  border: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 3px 5px;
+  font-size: 14px;
+  color: #f19f9d;
+  float: right;
+}
+#weeklyCalender {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* position: absolute; */
+  box-sizing: border-box;
+  margin-top: 16px;
+  /* border: 1px solid black; */
+  /* border-color: #1B1C1F; */
+  /* margin-left: 5px;
         margin-right: 8px; */
-        width: 100%; 
-        display: flex;
-        /* padding: 8px 16px !important; */
+  width: 100%;
+  display: flex;
+  /* padding: 8px 16px !important; */
+}
 
-    }
+.calendarRow {
+  display: flex;
+  justify-content: space-between;
+}
+#calendarItem {
+  flex-grow: 1;
+  flex-basis: 0;
+  /* border: 1px solid blue; */
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.day {
+  font-family: "Noto Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #767e8c;
+  flex-grow: 1;
+  /* border: 1px solid red; */
+  flex: 1;
+  text-align: center;
+  margin-bottom: 5px;
 
-
-    .calendarRow {
-        display: flex;
-        justify-content: space-between;
-
-    }
-    #calendarItem{
-        flex-grow: 1;
-        flex-basis: 0;
-        /* border: 1px solid blue; */
-        padding-top: 8px;
-        padding-bottom: 8px;
-        
-    }
-    .day{
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 12px;
-        font-weight: 400;
-        color: #767E8C;
-        flex-grow: 1;
-        /* border: 1px solid red; */
-        flex: 1;
-        text-align: center;
-        margin-bottom: 5px;
-
-        /* padding: 0 10px; */
-    }
-    .date {
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        color: #1B1C1F;
-        flex-grow: 1;
-        /* border: 1px solid yellow; */
-        flex: 1;
-        text-align: center;
-        /* padding: 0 10px; */
-    }
-    #calendar img {
-        margin-left: 5px;
-        vertical-align: middle; /* Add this line */
-    }
-
-
-
+  /* padding: 0 10px; */
+}
+.date {
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1b1c1f;
+  flex-grow: 1;
+  /* border: 1px solid yellow; */
+  flex: 1;
+  text-align: center;
+  /* padding: 0 10px; */
+}
+#calendar img {
+  margin-left: 5px;
+  vertical-align: middle; /* Add this line */
+}
 </style>
