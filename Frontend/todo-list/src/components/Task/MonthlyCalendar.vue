@@ -1,5 +1,6 @@
 <template>
   <div id="monthlyCalendar">
+    <img id="closeBtn" src="../../assets/icon/close.svg" alt="close Tab" @click="closeCalendar"/>
     <div class="card">
       <div class="calendar-toolbar">
         <button class="prev month-btn" @click="changeMonth(-1)">
@@ -74,7 +75,12 @@ export default {
       
     },
   },
-  methods: {
+  methods: {   
+    closeCalendar(){
+      this.$emit('closeCalendar');
+      this.$emit('selectedDate', this.selectedDate);
+    },
+
     changeMonth(num) {
       this.date.setMonth(this.date.getMonth() + num);
       this.date = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -132,6 +138,7 @@ export default {
     this.renderCalendar();
   },
 };
+
 </script>
 
 <style scoped>
@@ -142,17 +149,17 @@ export default {
 
 #monthlyCalendar {
   height: 100vh;
-  background: rgb(238, 174, 202);
-  background: radial-gradient(
-    circle,
-    rgba(238, 174, 202, 1) 0%,
-    rgba(148, 187, 233, 1) 100%
-  );
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Noto Sans", sans-serif;
   user-select: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 .card {
@@ -280,4 +287,10 @@ export default {
   color: #ffffff; /* 글자색도 원하시는 색상으로 변경하세요 */
 }
 /* https://www.codewithfaraz.com/content/97/learn-how-to-build-a-dynamic-calendar-with-html-css-and-javascript */
+
+#closeBtn {
+  position: absolute;
+  right: 32px;
+  top: 32px;
+}
 </style>

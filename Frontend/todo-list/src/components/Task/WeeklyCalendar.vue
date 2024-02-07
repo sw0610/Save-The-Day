@@ -1,7 +1,11 @@
 <template>
     <div id="weekly">
         <div id="buttons">
-            <button id="calendar" @click="goToCalendar">Feb 14</button>
+            <MonthlyCalendar v-if="displayCalendar" @closeCalendar="displayCalendar=false" @selectedDate="dateSelect"/>
+            <button id="calendar" @click="displayCalendar=true">
+                Feb 14
+                <img src="../../assets/icon/calendar_drop.svg" id="calendarBtn">
+            </button>
             <button id="today">Today</button>
         </div>
         <div id="weeklyCalender">
@@ -21,8 +25,18 @@
 </template>
 <script>
 import { ref } from 'vue';
+import MonthlyCalendar from './MonthlyCalendar.vue';
 
 export default {
+    components:{
+        MonthlyCalendar
+    },
+    data() {
+        return {
+            displayCalendar: false,
+            selectedDate:new Date()
+        };
+    },
     setup() {
         const days = ref(['SUN', 'MON', "TUE", "WED", "THU", "FRI", "SAT"]);
         const dates = ref(['4', '5', "6", "7", "8", "9", "10"]);
@@ -34,11 +48,18 @@ export default {
         }
         },
         methods: {
-        goToCalendar() {
-            this.$router.push('/calendar');
+        dateSelect(data) {
+            console.log(data);
+        }
+    },
+    created() {
+        if(this.$route.params.selectedDate) {
+            // this.selectedDate = this.$route.params.selectedDate;
+            console.log(this.selectedDate);
         }
     }
-}
+};
+
 
 
 
@@ -49,20 +70,21 @@ export default {
         background-color: #FFBAB5;
         height: 136px;
         margin:0;
-        padding: 0 24px; /* 이 줄을 추가하세요. */
-
+        padding: 0 24px;
         position: relative; 
         
     }
-    /* #buttons{
-        margin-left: 24px;
-        margin-right: 24px;
-    } */
+    #buttons{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
     button{
         margin-top: 16px;
         font-family: 'Noto Sans', sans-serif;
         font-weight: 500;
+
 
     }
     #calendar{
@@ -71,6 +93,8 @@ export default {
         padding-top:3px;
         border: 0;
         background-color: transparent;
+        display: flex; /* Add this line */
+        align-items: center; 
     }
     #today{
         border: 0;
@@ -135,6 +159,11 @@ export default {
         text-align: center;
         /* padding: 0 10px; */
     }
+    #calendar img {
+        margin-left: 5px;
+        vertical-align: middle; /* Add this line */
+    }
+
 
 
 </style>
