@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task")
 public class TaskController {
 
     private final TaskService taskService;
-    @GetMapping("/daily/{date}")
-    public ResponseEntity<DailyTaskListRes> getDailyTaskList(HttpServletRequest request, @PathVariable LocalDate date){
+    @GetMapping("/daily")
+    public ResponseEntity<DailyTaskListRes> getDailyTaskList(HttpServletRequest request, @RequestParam LocalDate date){
 //        Long id = getUserId();
         Long id = 1L;
         return ResponseEntity.ok(taskService.getDailyTaskList(id, date));
