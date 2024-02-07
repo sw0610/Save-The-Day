@@ -73,7 +73,7 @@ export default {
         
       this.selectedDate = data;
       this.displayCalendar = false;
-      this.$emitter.emit('send-date', this.selectedDate);
+      this.emitter.emit('send-date', this.selectedDate);
       this.updateWeek();
 
     },
@@ -114,7 +114,7 @@ export default {
   },
   selectDate(date) {
     this.selectedDate = date; // date 파라미터가 Date 객체이므로 직접 설정
-    this.$emitter.emit('send-date', this.selectedDate);
+    this.emitter.emit('send-date', this.selectedDate);
   },
 
   },
@@ -133,7 +133,7 @@ export default {
     },
     mounted() {
         this.updateWeek();
-        this.$emitter.emit('send-date', this.selectedDate);
+        this.emitter.emit('send-date', this.selectedDate);
     },
 
 };

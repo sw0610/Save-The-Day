@@ -49,20 +49,18 @@ export default {
     //     const dateData=this.emitter.on('send-date', data);
     // },
     mounted() {
-  this.$emitter.on('send-date', (selectedDate) => {
-    this.dateData = selectedDate
-    const dateString = this.dateData.toISOString().slice(0, 10);
-    console.clear();
-    console.log("dateString", this.dateData);
+  this.emitter.on('send-date', (date) => {
+    const dateString = date.toISOString().slice(0, 10);
     axios.get('http://localhost:8080/task/daily', {
-        params: {
+      params: {
         date: dateString,
-        },
+      },
     }).then((res) => {
-        console.log(res.data);
+      console.log(res.data);
+      // 필요한 작업을 수행합니다.
     });
   });
-}
+},
 
 
 }
