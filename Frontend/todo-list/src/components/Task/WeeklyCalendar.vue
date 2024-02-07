@@ -16,12 +16,22 @@
     <div id="weeklyCalender">
       <!-- <div class="day" v-for="day in days" :key="day.id"  >{{ day }}</div>
             <div class="date" v-for="date in dates" :key="date.id" >{{ date }}</div> -->
-      <div id="calendarItem" v-for="item in zippedData" :key="item.day">
+      <div id="calendarItem" v-for="item in zippedData" :key="item.day"
+      :class="{ 'selected-date': item.date == selectedDate.getDate() }"
+>
         <div class="calendarRow">
-          <div class="day">{{ item.day }}</div>
+          <div class="day"
+          :style="{ color: item.date == selectedDate.getDate() ? '#FFFFFF' : '' }">
+            {{ item.day }}
+        </div>
         </div>
         <div class="calendarRow">
-          <div class="date">{{ item.date }}</div>
+            <div 
+                class="date"
+                :style="{ color: item.date == selectedDate.getDate() ? '#FFFFFF' : '' }">
+                  <!-- :class="{ 'selected-date': item.date == selectedDate.getDate() }"> -->
+          {{ item.date }}
+        </div>
         </div>
       </div>
     </div>
@@ -202,5 +212,10 @@ button {
 #calendar img {
   margin-left: 5px;
   vertical-align: middle; /* Add this line */
+}
+
+.selected-date {
+  background-color: #F1867E;
+  border-radius: 8px;
 }
 </style>
