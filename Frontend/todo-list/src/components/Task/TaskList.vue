@@ -31,12 +31,32 @@
 </template>
 <script>
 import TaskListCard from './TaskListCard.vue'
+import axios from 'axios';
+
+// axios.get('http://localhost:8080/task/daily?date=2024-02-01').then((res)=>{
+//         console.log(res.data);
+//     })
 
 export default {
+    props:{
+        dateData: Date
+    },
     components: {
         'TaskList-Card': TaskListCard,
 
     },
+    created() {
+        console.clear();
+        const dateString = this.dateData.toISOString().slice(0, 10);
+        axios.get('http://localhost:8080/task/daily', {
+            params: {
+            date: dateString,
+            },
+        }).then((res) => {
+            console.log(res.data);
+        });
+    }   
+
 }
 </script>
 <style scoped>

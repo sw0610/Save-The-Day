@@ -75,10 +75,9 @@ export default {
       this.selectedDate = data;
       console.log(this.selectedDate);
       this.displayCalendar = false;
-        this.updateWeek();
-        console.log("date", this.selectedDate);
-        console.log("dates", this.dates);
-        console.log(this.dates[1]);
+      this.$emit('send-date', this.selectedDate);
+      this.updateWeek();
+
     },
     setToday() {
       this.selectedDate = new Date();
@@ -113,9 +112,11 @@ export default {
     for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
       this.dates.push(new Date(date)); // Date 객체를 dates 배열에 추가
     }
+    
   },
   selectDate(date) {
     this.selectedDate = date; // date 파라미터가 Date 객체이므로 직접 설정
+    this.$emit('send-date', this.selectedDate);
   },
 
   },
@@ -134,8 +135,9 @@ export default {
 
     },
     mounted() {
-        console.log(this.dates);
+        console.log("mount", this.dates);
         this.updateWeek();
+        this.$emit('send-date', this.selectedDate);
     },
 
 };
