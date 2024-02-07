@@ -237,13 +237,13 @@ export default {
 .month-day:hover,
 .btn:hover {
   border-radius: 15px;
-  background-color: #f8f7fa;
-  color: #f19f9d;
+  background-color: #f19f9d;
+  color: #FFFFFF;
   transition: 0.1s;
   cursor: pointer;
   box-shadow: inset 0px 0px 0px 1.5px #f19f9d;
-  background-color: transparent;
-  color: #1b1c1f;
+  /* background-color: transparent; */
+  /* color: #1b1c1f; */
 }
 
 .calendar-toolbar > [class$="month-btn"]:focus,
