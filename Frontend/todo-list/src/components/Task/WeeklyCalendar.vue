@@ -16,21 +16,27 @@
     <div id="weeklyCalender">
       <!-- <div class="day" v-for="day in days" :key="day.id"  >{{ day }}</div>
             <div class="date" v-for="date in dates" :key="date.id" >{{ date }}</div> -->
-      <div id="calendarItem" v-for="item in zippedData" :key="item.day"
+      <!-- <div id="calendarItem" v-for="item in zippedData" :key="item.day"
       :class="{ 'selected-date': item.date == selectedDate.getDate() }"
->
+      @click="selectDate(item.date)"> -->
+      <div 
+        id="calendarItem" 
+        v-for="item in zippedData" 
+        :key="item.day"
+        :class="{ 'selected-date': item.date.getDate() == selectedDate.getDate() }"
+        @click="selectDate(item.date)">
         <div class="calendarRow">
           <div class="day"
-          :style="{ color: item.date == selectedDate.getDate() ? '#FFFFFF' : '' }">
+          :style="{ color: item.date.getDate() == selectedDate.getDate() ? '#FFFFFF' : '' }">
             {{ item.day }}
         </div>
         </div>
         <div class="calendarRow">
-            <div 
-                class="date"
-                :style="{ color: item.date == selectedDate.getDate() ? '#FFFFFF' : '' }">
-                  <!-- :class="{ 'selected-date': item.date == selectedDate.getDate() }"> -->
-          {{ item.date }}
+    <div 
+      class="date"
+      :style="{ color: item.date.getDate() == selectedDate.getDate() ? '#FFFFFF' : '' }"
+    >
+      {{ item.date.getDate() }}
         </div>
         </div>
       </div>
@@ -76,6 +82,7 @@ export default {
     },
     setToday() {
       this.selectedDate = new Date();
+      this.updateWeek();
     },
     getMonthName(month) {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -93,16 +100,27 @@ export default {
         return { start: weekStart, end: weekEnd };
     },
     
+    // updateWeek() {
+    //     const { start, end } = this.getWeekRange(this.selectedDate);
+    //     this.dates = [];
+    //     for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+    //         this.dates.push(date.getDate().toString());
+    //     }
+    // },
     updateWeek() {
-        const { start, end } = this.getWeekRange(this.selectedDate);
-        this.dates = [];
-        for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-            this.dates.push(date.getDate().toString());
-        }
-    },
+    const { start, end } = this.getWeekRange(this.selectedDate);
+    this.dates = [];
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+      this.dates.push(new Date(date)); // Date 객체를 dates 배열에 추가
+    }
+  },
+  selectDate(date) {
+    this.selectedDate = date; // date 파라미터가 Date 객체이므로 직접 설정
+  },
 
   },
   created() {
+    this.updateWeek();
     if (this.$route.params.selectedDate) {
       // this.selectedDate = this.$route.params.selectedDate;
       console.log(this.selectedDate);
