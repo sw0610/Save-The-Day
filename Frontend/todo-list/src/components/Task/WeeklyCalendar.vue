@@ -1,7 +1,7 @@
 <template>
     <div id="weekly">
         <div id="buttons">
-            <button id="calendar">Feb 14</button>
+            <button id="calendar" @click="goToCalendar">Feb 14</button>
             <button id="today">Today</button>
         </div>
         <div id="weeklyCalender">
@@ -32,8 +32,15 @@ export default {
         return {
             zippedData
         }
+        },
+        methods: {
+        goToCalendar() {
+            this.$router.push('/calendar');
         }
+    }
 }
+
+
 
 </script>
 <style scoped>
