@@ -29,7 +29,6 @@ export default {
     methods: {
         receiveDate(value) {
             this.dateData = value; // Weekly-Calendar로부터 받아온 데이터를 Task-List로 전달
-            console.log("this is date", this.dateData);
         
         }
     }

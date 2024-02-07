@@ -44,7 +44,6 @@
   </div>
 </template>
 <script>
-// import { ref } from "vue";
 import MonthlyCalendar from "./MonthlyCalendar.vue";
 
 export default {
@@ -73,9 +72,8 @@ export default {
     dateSelect(data) {
         
       this.selectedDate = data;
-      console.log(this.selectedDate);
       this.displayCalendar = false;
-      this.$emit('send-date', this.selectedDate);
+      this.$emitter.emit('send-date', this.selectedDate);
       this.updateWeek();
 
     },
@@ -116,7 +114,7 @@ export default {
   },
   selectDate(date) {
     this.selectedDate = date; // date 파라미터가 Date 객체이므로 직접 설정
-    this.$emit('send-date', this.selectedDate);
+    this.$emitter.emit('send-date', this.selectedDate);
   },
 
   },
@@ -124,7 +122,6 @@ export default {
     this.updateWeek();
     if (this.$route.params.selectedDate) {
       // this.selectedDate = this.$route.params.selectedDate;
-      console.log(this.selectedDate);
     }
   },
   computed: {
@@ -135,9 +132,8 @@ export default {
 
     },
     mounted() {
-        console.log("mount", this.dates);
         this.updateWeek();
-        this.$emit('send-date', this.selectedDate);
+        this.$emitter.emit('send-date', this.selectedDate);
     },
 
 };

@@ -85,7 +85,6 @@
         computed:{
             isFormValid(){
                 var data= this.formData;
-                console.log(data);
                 return data.title!==''
                     && data.priority!==null && data.status!==null;
             }

@@ -38,24 +38,32 @@ import axios from 'axios';
 //     })
 
 export default {
-    props:{
-        dateData: Date
-    },
+    // props:{
+    //     dateData: Date
+    // },
     components: {
         'TaskList-Card': TaskListCard,
 
     },
-    created() {
-        console.clear();
-        const dateString = this.dateData.toISOString().slice(0, 10);
-        axios.get('http://localhost:8080/task/daily', {
-            params: {
-            date: dateString,
-            },
-        }).then((res) => {
-            console.log(res.data);
-        });
-    }   
+    // setup(){
+    //     const dateData=this.emitter.on('send-date', data);
+    // },
+    mounted() {
+  this.$emitter.on('send-date', (selectedDate) => {
+    this.dateData = selectedDate
+    const dateString = this.dateData.toISOString().slice(0, 10);
+    console.clear();
+    console.log("dateString", this.dateData);
+    axios.get('http://localhost:8080/task/daily', {
+        params: {
+        date: dateString,
+        },
+    }).then((res) => {
+        console.log(res.data);
+    });
+  });
+}
+
 
 }
 </script>
