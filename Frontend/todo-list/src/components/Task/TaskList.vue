@@ -32,7 +32,7 @@
   
 <script>
 import TaskListCard from './TaskListCard.vue'
-import axios from 'axios';
+import http from '@/util/http-common.js'
 
 // axios.get('http://localhost:8080/task/daily?date=2024-02-01').then((res)=>{
 //         console.log(res.data);
@@ -59,7 +59,7 @@ export default {
         const offset = new Date().getTimezoneOffset() * 60000;
         const krDate = new Date(date-offset)
         const dateString = krDate.toISOString().slice(0, 10);
-        axios.get('http://localhost:8080/task/daily', {
+        http.get('http://localhost:8080/task/daily', {
             params: {
             date: dateString,
             },

@@ -1,6 +1,6 @@
 <template>
   <div id="monthlyCalendar">
-    <img id="closeBtn" src="../../assets/icon/close.svg" alt="close Tab" @click="closeCalendar"/>
+    <img id="closeBtn" src="@/assets/icon/close.svg" alt="close Tab" @click="closeCalendar"/>
     <div class="card">
       <div class="calendar-toolbar">
         <button class="prev month-btn" @click="changeMonth(-1)">
