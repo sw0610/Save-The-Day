@@ -49,18 +49,21 @@ export default {
     //     const dateData=this.emitter.on('send-date', data);
     // },
     mounted() {
-  this.emitter.on('send-date', (date) => {
-    const dateString = date.toISOString().slice(0, 10);
-    axios.get('http://localhost:8080/task/daily', {
-      params: {
-        date: dateString,
-      },
-    }).then((res) => {
-      console.log(res.data);
-      // 필요한 작업을 수행합니다.
-    });
-  });
-},
+        this.emitter.on('send-date', (date) => {
+        const offset = new Date().getTimezoneOffset() * 60000;
+        const krDate = new Date(date-offset)
+        const dateString = krDate.toISOString().slice(0, 10);
+        axios.get('http://localhost:8080/task/daily', {
+            params: {
+            date: dateString,
+            },
+        }).then((res) => {
+            console.log(dateString);
+            console.log(res.data);
+            // 필요한 작업을 수행합니다.
+        });
+        });
+    },
 
 
 }
