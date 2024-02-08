@@ -27,19 +27,19 @@ public class TaskServiceImpl implements TaskService{
         //사용자 찾고 그 안이서 날짜 찾아서 리스트 형태로 반환
         List<DailyTaskRes> notStartedList =
                 taskRepository.findAllByMemberIdAndDueDateAndProcessStatusOrderByCreatedAt(id, date, "not started")
-                .stream()
+                .stream().flatMap(List::stream)
                 .map(DailyTaskRes::toDailyTaskRes)
                 .toList();
 
         List<DailyTaskRes> inProgressList =
                 taskRepository.findAllByMemberIdAndDueDateAndProcessStatusOrderByCreatedAt(id, date, "in progress")
-                .stream()
+                .stream().flatMap(List::stream)
                 .map(DailyTaskRes::toDailyTaskRes)
                 .toList();
 
         List<DailyTaskRes> finishedList =
                 taskRepository.findAllByMemberIdAndDueDateAndProcessStatusOrderByCreatedAt(id, date, "finished")
-                .stream()
+                .stream().flatMap(List::stream)
                 .map(DailyTaskRes::toDailyTaskRes)
                 .toList();
 
