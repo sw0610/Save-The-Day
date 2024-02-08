@@ -55,7 +55,7 @@ public class Task {
                 .title(req.getTitle())
                 .content(req.getContent())
                 .dueDate(req.getDueDate())
-                .processStatus("not started")
+                .processStatus(req.getProcessStatus())
                 .importance(req.getImportance())
                 .build();
     }
