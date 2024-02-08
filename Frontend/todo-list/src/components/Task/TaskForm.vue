@@ -5,7 +5,7 @@
                 <div class="title">Title</div>
                 <div id="titleInputBox">
                     <input class="box" id="titleInput" v-model="formData.title" type="text" @focus="isTitleFocused=true" @blur="isTitleFocused=false">
-                    <img id="inputIcon" :src= "require(isTitleFocused ? '../../assets/icon/check_selected.svg':'../../assets/icon/check.svg')">
+                    <img id="inputIcon" :src= "require(isTitleFocused ? '@/assets/icon/check_selected.svg':'@/assets/icon/check.svg')">
                 </div>
             </div>
             <div class="formComponent" id="date">
@@ -33,34 +33,35 @@
             </div>
             <div  class="formComponent" id="content">
                 <div class="title" >Content</div>
-                <textarea id="contentInput" class="box" type="text" @focus="isContentSelected=true" @blur="isContentSelected=false"></textarea>
+                <textarea id="contentInput" class="box" type="text" v-model="formData.content" @focus="isContentSelected=true" @blur="isContentSelected=false"></textarea>
             </div>
             <div id="emotion" v-if="selectedStatusOption === 'Finished'">
                 <div class="title">Emotion</div>
                     <div id="emojiContainer">
                         <div class="emoji" id="happy" @click="selectEmotion('happy')" :class="{ selectedEmotion: selectedEmotion === 'happy' }">
-                            <img :src="require(selectedEmotion === 'happy' ? '../../assets/icon/emoji/happy_color.svg' : '../../assets/icon/emoji/happy_gray.svg')" />
+                            <img :src="require(selectedEmotion === 'happy' ? '@/assets/icon/emoji/happy_color.svg' : '@/assets/icon/emoji/happy_gray.svg')" />
                         </div>
                         <div class="emoji" id="lovely" @click="selectEmotion('lovely')" :class="{ selectedEmotion: selectedEmotion === 'lovely' }">
-                            <img :src="require(selectedEmotion === 'lovely' ? '../../assets/icon/emoji/lovely_color.svg' : '../../assets/icon/emoji/lovely_gray.svg')" />
+                            <img :src="require(selectedEmotion === 'lovely' ? '@/assets/icon/emoji/lovely_color.svg' : '@/assets/icon/emoji/lovely_gray.svg')" />
                         </div>
                         <div class="emoji" id="soso" @click="selectEmotion('soso')" :class="{ selectedEmotion: selectedEmotion === 'soso' }">
-                            <img :src="require(selectedEmotion === 'soso' ? '../../assets/icon/emoji/soso_color.svg' : '../../assets/icon/emoji/soso_gray.svg')" />
+                            <img :src="require(selectedEmotion === 'soso' ? '@/assets/icon/emoji/soso_color.svg' : '@/assets/icon/emoji/soso_gray.svg')" />
                         </div>
                         <div class="emoji" id="sad" @click="selectEmotion('sad')" :class="{ selectedEmotion: selectedEmotion === 'sad' }">
-                            <img :src="require(selectedEmotion === 'sad' ? '../../assets/icon/emoji/sad_color.svg' : '../../assets/icon/emoji/sad_gray.svg')" />
+                            <img :src="require(selectedEmotion === 'sad' ? '@/assets/icon/emoji/sad_color.svg' : '@/assets/icon/emoji/sad_gray.svg')" />
                         </div>
                         <div class="emoji" id="angry" @click="selectEmotion('angry')" :class="{ selectedEmotion: selectedEmotion === 'angry' }">
-                            <img :src="require(selectedEmotion === 'angry' ? '../../assets/icon/emoji/angry_color.svg' : '../../assets/icon/emoji/angry_gray.svg')" />
+                            <img :src="require(selectedEmotion === 'angry' ? '@/assets/icon/emoji/angry_color.svg' : '@/assets/icon/emoji/angry_gray.svg')" />
                         </div>
                     </div>                
             </div>
         </div>
-        <button id="submitBtn" :disabled="!isFormValid">저장</button>
+        <button id="submitBtn" :disabled="!isFormValid" @click="postTask">저장</button>
     </div>
 </template>
 <script>
 import MonthlyCalendar from "./MonthlyCalendar.vue";
+import http from "@/util/http-common.js"
 
     export default{
         components: {
@@ -90,6 +91,7 @@ import MonthlyCalendar from "./MonthlyCalendar.vue";
         methods: {
             dateSelect(data) {
                 this.date = data;
+                console.log(this.date);
                 this.displayCalendar = false;
             },
             toggleDropdown() {
@@ -116,6 +118,19 @@ import MonthlyCalendar from "./MonthlyCalendar.vue";
             },
             selectEmotion(id){
                 this.selectedEmotion = id;
+            },
+            postTask(){
+                const offset = new Date().getTimezoneOffset() * 60000;
+                const krDate = new Date(this.date-offset)
+
+                http.post(`/task/detail`,{
+                    title:this.formData.title,
+                    dueDate:krDate,
+                    importance:this.formData.priority,
+                    processStatus:this.formData.status,
+                    emotion:this.formData.emotion,
+                    content:this.formData.content
+                }).then(()=>this.$router.push(`/`));
             }
         },
         computed:{
