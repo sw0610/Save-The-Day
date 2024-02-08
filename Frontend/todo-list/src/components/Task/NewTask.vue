@@ -2,7 +2,7 @@
     <div id="newTask">
         <div>
             <button id="newTaskBtn"  @click="goToNewTaskPage">
-                <img src="../../assets/icon/plus_icon.svg" id="btnImage" alt="button image">
+                <img src="@/assets/icon/plus_icon.svg" id="btnImage" alt="button image">
                 Add New Task
             </button>
         </div>

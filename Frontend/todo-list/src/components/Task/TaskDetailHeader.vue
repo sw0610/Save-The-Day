@@ -2,7 +2,7 @@
 
     <div class="header" id="header">
         <div id="titleBar">
-            <img id="menu" src="../../assets/icon/left_icon.svg" @click="goBack">
+            <img id="menu" src="@/assets/icon/left_icon.svg" @click="goBack">
             <div id="title">Todo</div>
 
         </div>

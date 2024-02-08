@@ -10,7 +10,7 @@
       />
       <button id="calendar" @click="displayCalendar=true">
         {{ getMonthName(selectedDate.getMonth()) }} {{ selectedDate.getDate() }}
-        <img src="../../assets/icon/calendar_drop.svg" id="calendarBtn" />
+        <img src="@/assets/icon/calendar_drop.svg" id="calendarBtn" />
       </button>
       <button id="today" @click="setToday">Today</button>
     </div>

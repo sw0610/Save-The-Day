@@ -2,7 +2,7 @@
 
     <div class="header" id="header">
         <div id="titleBar">
-            <img id="menu" src="../../assets/icon/menu_bar.svg">
+            <img id="menu" src="@/assets/icon/menu_bar.svg">
             <div id="title">Todo List</div>
 
         </div>
