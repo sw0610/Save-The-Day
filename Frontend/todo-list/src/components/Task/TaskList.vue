@@ -1,34 +1,35 @@
 <template>
     <div id="taskList">
+      <div v-if="hasTasks">
         <div class="list">
-            <div class="statusText" id="todoLine">Todo</div>
-            <div>
-                <div class="tasks">
-                    <!-- <div class="statusCircle"></div> -->
-                    <!-- 음악 듣기 -->
-                    <TaskList-Card></TaskList-Card>
-                </div>
+          <div v-if="this.notStartedList.length>0" class="statusText" id="todoLine">Todo</div>
+          <div>
+            <div class="tasks">
+              <TaskList-Card :taskList="notStartedList"></TaskList-Card>
             </div>
+          </div>
         </div>
         <div>
-            <div class="statusText" id="inProgressLine">In Progress</div>
-            <div>
-                <div class="tasks">
-                    <TaskList-Card></TaskList-Card>
-
-                </div>
+          <div v-if="this.inProgressList.length>0" class="statusText" id="inProgressLine">In Progress</div>
+          <div>
+            <div class="tasks">
+              <TaskList-Card :taskList="inProgressList"></TaskList-Card>
             </div>
+          </div>
         </div>
         <div>
-            <div class="statusText" id="finishedLine">Finished</div>
-            <div>
-                <div class="tasks">
-                    <TaskList-Card></TaskList-Card>
-                </div>
+          <div  v-if="this.finishedList.length>0" class="statusText" id="finishedLine">Finished</div>
+          <div>
+            <div class="tasks">
+              <TaskList-Card></TaskList-Card>
             </div>
+          </div>
         </div>
+      </div>
+      <div v-else class="noTask">✨ 할 일이 없어요 ✨</div>
     </div>
-</template>
+  </template>
+  
 <script>
 import TaskListCard from './TaskListCard.vue'
 import axios from 'axios';
@@ -38,9 +39,14 @@ import axios from 'axios';
 //     })
 
 export default {
-    // props:{
-    //     dateData: Date
-    // },
+    data() {
+        return {
+            notStartedList:[],
+            inProgressList:[],
+            finishedList:[],
+            hasTasks: false
+        }
+    },
     components: {
         'TaskList-Card': TaskListCard,
 
@@ -58,9 +64,17 @@ export default {
             date: dateString,
             },
         }).then((res) => {
-            console.log(dateString);
-            console.log(res.data);
+            const datas = res.data;
             // 필요한 작업을 수행합니다.
+            if(datas.notStartedList.length==0&&datas.inProgressList.length==0&&datas.finishedList==0){
+                this.hasTasks=false;
+            }else{
+                this.hasTasks=true;
+            }
+            console.log(this.inProgressList);
+            this.notStartedList=datas.notStartedList;
+            this.inProgressList=datas.inProgressList;
+            this.finishedList=datas.finishedList;
         });
         });
     },
@@ -133,5 +147,15 @@ export default {
         font-weight: 500;
         font-size: 14px;
     } */
+
+    .noTask {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Noto Sans kr", sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+    }
+
 
 </style>

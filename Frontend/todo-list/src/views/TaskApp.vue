@@ -1,9 +1,9 @@
 <template>
     <div id="Task">
         <Task-Header></Task-Header>
-        <Weekly-Calender @send-date="receiveDate"></Weekly-Calender>
+        <Weekly-Calender></Weekly-Calender>
         <New-Task></New-Task>
-        <Task-List :dateData="dateData"></Task-List>
+        <Task-List></Task-List>
     </div>
     
 </template>
@@ -21,17 +21,17 @@ export default {
         'New-Task' : NewTask,
         'Task-List': TaskList
     },
-    data(){
-        return{
-            dateData:new Date(),
-        }
-    },
-    methods: {
-        receiveDate(value) {
-            this.dateData = value; // Weekly-Calendar로부터 받아온 데이터를 Task-List로 전달
+    // data(){
+    //     return{
+    //         dateData:new Date(),
+    //     }
+    // },
+    // methods: {
+    //     receiveDate(value) {
+    //         this.dateData = value; // Weekly-Calendar로부터 받아온 데이터를 Task-List로 전달
         
-        }
-    }
+    //     }
+    // }
 }
 </script>
 <style scoped>

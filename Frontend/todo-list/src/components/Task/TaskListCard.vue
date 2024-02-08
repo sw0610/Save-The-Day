@@ -1,10 +1,18 @@
  <template>
-    <div id="task">
-        <div id="status"></div>
-        책 읽기
+    <div id="task" v-for="task in taskList" :key="task.id">
+        <div v-if="task.processStatus==='not started'" class="status" id="notStarted"></div>
+        <div v-if="task.processStatus==='in progress'" class="status" id="inProgress"></div>
+        <div v-if="task.processStatus==='finished'" class="status" id="finished"></div>
+
+        {{ task.title }}
     </div>
  </template>
  <script>
+ export default{
+    props:{
+        taskList: Array
+    }
+ }
 </script>
 <style scoped>
     #task{
@@ -25,13 +33,22 @@
         font-size: 16px;
         margin-bottom: 10px;;
     }
-    #status{
-        border: 1px solid #7E869E;
-        border-radius: 50%;
+    .status{
+
         width: 16px;
         height: 16px;
         /* margin-left: ; */
         margin-right: 20px;
+    }
+    #notStarted{
+        border: 1px dashed #F1867E;
+        border-radius: 50%;
+    }
+
+    #inProgress{
+        border: 1px solid #F1867E;
+        border-radius: 50%;
+        background-color: #FFBAB5;
     }
 
 </style>
