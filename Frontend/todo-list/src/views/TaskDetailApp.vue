@@ -1,6 +1,8 @@
 <template>
+    <div>
         <TaskDetail-Header></TaskDetail-Header>
         <Task-Form></Task-Form>
+    </div>
 </template>
 <script>
 import TaskDetailHeader from '../components/Task/TaskDetailHeader.vue'

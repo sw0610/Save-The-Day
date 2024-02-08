@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  props:['showDate'],
+  props:['showDate', 'isWeekly', 'isForm'],
   data() {
     return {
       selectedDate: new Date(this.showDate),
@@ -79,7 +79,8 @@ export default {
   },
   methods: {   
     closeCalendar(){
-      this.$emit('selectedDate', this.selectedDate);
+        this.$emit('selectedDate', this.selectedDate);
+        // this.$emit('date', this.selectedDate);
     },
 
     changeMonth(num) {
@@ -147,6 +148,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  z-index: 2;
 }
 
 #monthlyCalendar {

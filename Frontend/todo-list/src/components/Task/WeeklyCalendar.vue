@@ -4,6 +4,7 @@
       <MonthlyCalendar
         v-if="displayCalendar"
         :showDate=selectedDate
+        :isWeekly="true"
         @closeCalendar="handleCloseCalendar"
         @selectedDate="dateSelect"
       />

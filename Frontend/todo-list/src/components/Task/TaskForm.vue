@@ -10,8 +10,9 @@
             </div>
             <div class="formComponent" id="date">
                 <div class="title">Date</div>
-                <button class="box"></button>  
+                <button class="box"  @click="displayCalendar=true">{{ date.getFullYear() }}년 {{ date.getMonth()+1 }}월 {{ date.getDate() }}일</button>  
             </div>
+            <MonthlyCalendar v-if="displayCalendar" :showDate=date :isForm="true" @closeCalendar="handleCloseCalendar" @selectedDate="dateSelect"/>
             <div  class="formComponent" id="importance">
                 <div class="title">Priority</div>
                 <div class="selectBox" :class="{ selectBoxOpen: isOpen }">
@@ -34,20 +35,46 @@
                 <div class="title" >Content</div>
                 <textarea id="contentInput" class="box" type="text" @focus="isContentSelected=true" @blur="isContentSelected=false"></textarea>
             </div>
+            <div id="emotion" v-if="selectedStatusOption === 'Finished'">
+                <div class="title">Emotion</div>
+                    <div id="emojiContainer">
+                        <div class="emoji" id="happy" @click="selectEmotion('happy')" :class="{ selectedEmotion: selectedEmotion === 'happy' }">
+                            <img :src="require(selectedEmotion === 'happy' ? '../../assets/icon/emoji/happy_color.svg' : '../../assets/icon/emoji/happy_gray.svg')" />
+                        </div>
+                        <div class="emoji" id="lovely" @click="selectEmotion('lovely')" :class="{ selectedEmotion: selectedEmotion === 'lovely' }">
+                            <img :src="require(selectedEmotion === 'lovely' ? '../../assets/icon/emoji/lovely_color.svg' : '../../assets/icon/emoji/lovely_gray.svg')" />
+                        </div>
+                        <div class="emoji" id="soso" @click="selectEmotion('soso')" :class="{ selectedEmotion: selectedEmotion === 'soso' }">
+                            <img :src="require(selectedEmotion === 'soso' ? '../../assets/icon/emoji/soso_color.svg' : '../../assets/icon/emoji/soso_gray.svg')" />
+                        </div>
+                        <div class="emoji" id="sad" @click="selectEmotion('sad')" :class="{ selectedEmotion: selectedEmotion === 'sad' }">
+                            <img :src="require(selectedEmotion === 'sad' ? '../../assets/icon/emoji/sad_color.svg' : '../../assets/icon/emoji/sad_gray.svg')" />
+                        </div>
+                        <div class="emoji" id="angry" @click="selectEmotion('angry')" :class="{ selectedEmotion: selectedEmotion === 'angry' }">
+                            <img :src="require(selectedEmotion === 'angry' ? '../../assets/icon/emoji/angry_color.svg' : '../../assets/icon/emoji/angry_gray.svg')" />
+                        </div>
+                    </div>                
+            </div>
         </div>
         <button id="submitBtn" :disabled="!isFormValid">저장</button>
     </div>
 </template>
 <script>
+import MonthlyCalendar from "./MonthlyCalendar.vue";
+
     export default{
+        components: {
+            MonthlyCalendar,
+        },
         data(){
             return{
                 isTitleFocused: false,
                 isContentSelected:false,
+                displayCalendar:false,
                 importanceOpts:['High', 'Normal', 'Low'],
                 isOpen: false,
                 selectedOption: null,
-                statusOpts: ['Not Started', 'In Progress', 'Not Started'],
+                statusOpts: ['Not Started', 'In Progress', 'Finished'],
                 isStatusOpen: false,
                 selectedStatusOption: null,
                 formData:{
@@ -55,10 +82,16 @@
                     content:'',
                     priority:null,
                     status:null,
-                }
+                },
+                selectedEmotion: null,
+                date:new Date()
             };
         },
         methods: {
+            dateSelect(data) {
+                this.date = data;
+                this.displayCalendar = false;
+            },
             toggleDropdown() {
                 this.isOpen = !this.isOpen;
                 if(this.isOpen){
@@ -80,6 +113,9 @@
                 this.selectedStatusOption = option;
                 this.formData.status = option;
                 this.isStatusOpen = false; // 선택한 후 드롭다운을 닫습니다.
+            },
+            selectEmotion(id){
+                this.selectedEmotion = id;
             }
         },
         computed:{
@@ -271,6 +307,29 @@
         border: 1px solid #A3A3B9;
         background-color: #A3A3B9;
         color: #FFFFFF;
+    }
+    #emojiContainer{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+        justify-content: space-between; /* 추가된 부분 */
+        
+    }
+    
+    .emoji{
+        width: 60px;
+        height: 60px;
+        border: 1px solid #7E869E;
+        border-radius: 15px;
+        display: flex;  
+        justify-content: center;
+        align-items: center;
+    }
+
+    .selectedEmotion{
+        border: 1px solid #F19F9D;
+        background-color: #F19F9D;
     }
 
     </style>
