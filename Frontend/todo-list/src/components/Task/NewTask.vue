@@ -25,8 +25,6 @@ export default {
     },
     mounted() {
         this.emitter.on('send-date', (selectedDate) => {
-            console.log("mounted에서 확인합니다");
-            console.log("결과:", selectedDate);
             this.selectedDate = new Date(selectedDate);
         });
     }

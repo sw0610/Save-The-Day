@@ -54,6 +54,7 @@ public class Task {
                 .dueDate(req.getDueDate())
                 .processStatus(req.getProcessStatus())
                 .priority(req.getPriority())
+                .emotion(req.getEmotion())
                 .build();
     }
 

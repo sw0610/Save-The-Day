@@ -93,7 +93,6 @@ import http from "@/util/http-common.js"
         methods: {
             dateSelect(data) {
                 this.date = data;
-                console.log(this.date);
                 this.displayCalendar = false;
             },
             toggleDropdown() {
@@ -125,14 +124,31 @@ import http from "@/util/http-common.js"
                 const offset = new Date().getTimezoneOffset() * 60000;
                 const krDate = new Date(this.date-offset)
 
-                http.post(`/task/detail`,{
+                if(this.formData.processStatus!=="Finished"){
+                    this.selectedEmotion=null;
+                }
+
+                if(this.$route.params.taskId){
+                    http.put(`/task/detail/${this.$route.params.taskId}`,{
+                        title:this.formData.title,
+                        dueDate:krDate,
+                        priority:this.formData.priority,
+                        processStatus:this.formData.processStatus,
+                        emotion:this.selectedEmotion,
+                        content:this.formData.content
+                    }).then(()=>this.$router.push(`/task`));
+                }
+                else{
+                    http.post(`/task/detail`,{
                     title:this.formData.title,
                     dueDate:krDate,
                     priority:this.formData.priority,
                     processStatus:this.formData.processStatus,
-                    emotion:this.formData.emotion,
+                    emotion:this.selectedEmotion,
                     content:this.formData.content
                 }).then(()=>this.$router.push(`/task`));
+                }
+
             }
         },
         computed:{
@@ -146,26 +162,21 @@ import http from "@/util/http-common.js"
             if(this.$route.params.taskId){
                 http.get(`/task/detail/${this.$route.params.taskId}`)
                 .then(res => {
-                    console.clear();
-                    console.log(res.data);
+
                     this.formData=res.data;
                     this.selectedOption = res.data.priority;
                     this.selectedStatusOption = res.data.processStatus;
                     this.date = new Date(res.data.dueDate);
-                    // console.log(this)
+                    this.selectedEmotion = res.data.emotion;
                     // this.formData.title=res.title;
                 });
             }
 
         },
         created() {
-            console.log("created에서 확인합니다");
             if (this.$route.query.selectedDate) {
-                console.log("??????!!!!?!?!");
-                console.log(this.$route.query.selectedDate);
                 this.date = new Date(this.$route.query.selectedDate);
             }
-            console.log("끝났는지 확인합니다");
 
         }
     };

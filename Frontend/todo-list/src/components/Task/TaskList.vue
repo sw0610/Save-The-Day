@@ -66,7 +66,6 @@ export default {
     },
     methods:{
       getTaskList(date){
-        console.log(date);
         const offset = new Date().getTimezoneOffset() * 60000;
         const krDate = new Date(date-offset)
         const dateString = krDate.toISOString().slice(0, 10);
@@ -83,7 +82,6 @@ export default {
             }else{
                 this.hasTasks=true;
             }
-            console.log(this.inProgressList);
             this.notStartedList=datas.notStartedList;
             this.inProgressList=datas.inProgressList;
             this.finishedList=datas.finishedList;
