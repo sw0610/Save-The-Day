@@ -8,12 +8,18 @@ import MonthlyCalendar from '../components/Task/MonthlyCalendar.vue'
 
 const routes = [
     {
-        path: "/", 
+        path: "/task", 
         name:"home",
         component:TaskApp
     },
     {
-        path: '/detail', 
+        path: '/task/new', 
+        name:"newTask",
+        component:TaskDetail,
+        props: true
+    },
+    {
+        path: '/task/detail/:taskId', 
         component:TaskDetail
     },
     {

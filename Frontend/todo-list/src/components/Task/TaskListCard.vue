@@ -1,7 +1,7 @@
  <template>
     <div>
     <div v-for="task in taskList" :key="task.id">
-        <router-link class="routerLink" :to="'/detail/'+task.taskId">
+        <router-link class="routerLink" :to="'/task/detail/'+task.taskId">
             <div id="task" >
                 <div v-if="task.processStatus==='Not Started'" class="status" id="notStarted"></div>
                 <div v-if="task.processStatus==='In Progress'" class="status" id="inProgress"></div>

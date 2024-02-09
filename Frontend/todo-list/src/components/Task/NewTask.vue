@@ -10,10 +10,25 @@
 </template>
 <script>
 export default {
+    data(){
+        return{
+            selectedDate:new Date()
+        }
+    },
     methods: {
         goToNewTaskPage() {
-            this.$router.push('/detail');
-        }
+            this.$router.push({
+            path: '/task/new',
+            query: { selectedDate: this.selectedDate}
+        });        
+    }
+    },
+    mounted() {
+        this.emitter.on('send-date', (selectedDate) => {
+            console.log("mounted에서 확인합니다");
+            console.log("결과:", selectedDate);
+            this.selectedDate = new Date(selectedDate);
+        });
     }
 };
 </script>

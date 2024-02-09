@@ -81,8 +81,10 @@ import http from "@/util/http-common.js"
                 formData:{
                     title:'',
                     content:'',
+                    dueDate:null,
                     priority:null,
-                    status:null,
+                    processStatus:null,
+                    emotion:null
                 },
                 selectedEmotion: null,
                 date:new Date()
@@ -113,7 +115,7 @@ import http from "@/util/http-common.js"
             },
             selectStatusOption(option) {
                 this.selectedStatusOption = option;
-                this.formData.status = option;
+                this.formData.processStatus = option;
                 this.isStatusOpen = false; // 선택한 후 드롭다운을 닫습니다.
             },
             selectEmotion(id){
@@ -126,19 +128,45 @@ import http from "@/util/http-common.js"
                 http.post(`/task/detail`,{
                     title:this.formData.title,
                     dueDate:krDate,
-                    importance:this.formData.priority,
-                    processStatus:this.formData.status,
+                    priority:this.formData.priority,
+                    processStatus:this.formData.processStatus,
                     emotion:this.formData.emotion,
                     content:this.formData.content
-                }).then(()=>this.$router.push(`/`));
+                }).then(()=>this.$router.push(`/task`));
             }
         },
         computed:{
             isFormValid(){
                 var data= this.formData;
                 return data.title!==''
-                    && data.priority!==null && data.status!==null;
+                    && data.priority!==null && data.processStatus!==null;
             }
+        },
+        mounted(){
+            if(this.$route.params.taskId){
+                http.get(`/task/detail/${this.$route.params.taskId}`)
+                .then(res => {
+                    console.clear();
+                    console.log(res.data);
+                    this.formData=res.data;
+                    this.selectedOption = res.data.priority;
+                    this.selectedStatusOption = res.data.processStatus;
+                    this.date = new Date(res.data.dueDate);
+                    // console.log(this)
+                    // this.formData.title=res.title;
+                });
+            }
+
+        },
+        created() {
+            console.log("created에서 확인합니다");
+            if (this.$route.query.selectedDate) {
+                console.log("??????!!!!?!?!");
+                console.log(this.$route.query.selectedDate);
+                this.date = new Date(this.$route.query.selectedDate);
+            }
+            console.log("끝났는지 확인합니다");
+
         }
     };
 </script>
