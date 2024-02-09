@@ -21,7 +21,7 @@
           <div  v-if="this.finishedList.length>0" class="statusText" id="finishedLine">Finished</div>
           <div>
             <div class="tasks">
-              <TaskList-Card></TaskList-Card>
+              <TaskList-Card :taskList="finishedList"></TaskList-Card>
             </div>
           </div>
         </div>
@@ -34,9 +34,6 @@
 import TaskListCard from './TaskListCard.vue'
 import http from '@/util/http-common.js'
 
-// axios.get('http://localhost:8080/task/daily?date=2024-02-01').then((res)=>{
-//         console.log(res.data);
-//     })
 
 export default {
     data() {
@@ -44,7 +41,8 @@ export default {
             notStartedList:[],
             inProgressList:[],
             finishedList:[],
-            hasTasks: false
+            hasTasks: false,
+            date: new Date()
         }
     },
     components: {
@@ -56,16 +54,30 @@ export default {
     // },
     mounted() {
         this.emitter.on('send-date', (date) => {
+            this.date = date;
+        });
+
+        this.getTaskList(new Date());
+    },
+    watch:{
+      date: function(newDate){
+        this.getTaskList(newDate);
+      }
+    },
+    methods:{
+      getTaskList(date){
+        console.log(date);
         const offset = new Date().getTimezoneOffset() * 60000;
         const krDate = new Date(date-offset)
         const dateString = krDate.toISOString().slice(0, 10);
+
         http.get('http://localhost:8080/task/daily', {
             params: {
             date: dateString,
             },
         }).then((res) => {
             const datas = res.data;
-            // 필요한 작업을 수행합니다.
+
             if(datas.notStartedList.length==0&&datas.inProgressList.length==0&&datas.finishedList==0){
                 this.hasTasks=false;
             }else{
@@ -76,7 +88,8 @@ export default {
             this.inProgressList=datas.inProgressList;
             this.finishedList=datas.finishedList;
         });
-        });
+      }
+    
     },
 
 
