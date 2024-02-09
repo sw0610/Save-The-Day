@@ -1,20 +1,33 @@
  <template>
-    <div id="task" v-for="task in taskList" :key="task.id">
-        <div v-if="task.processStatus==='not started'" class="status" id="notStarted"></div>
-        <div v-if="task.processStatus==='in progress'" class="status" id="inProgress"></div>
-        <div v-if="task.processStatus==='finished'" class="status" id="finished"></div>
+    <div>
+    <div v-for="task in taskList" :key="task.id">
+        <router-link class="routerLink" :to="'/detail/'+task.taskId">
+            <div id="task" >
+                <div v-if="task.processStatus==='Not Started'" class="status" id="notStarted"></div>
+                <div v-if="task.processStatus==='In Progress'" class="status" id="inProgress"></div>
+                <div v-if="task.processStatus==='Finished'" class="status" id="finished"></div>
 
-        {{ task.title }}
+                {{ task.title }}
+            </div>
+        </router-link>
     </div>
+</div>
  </template>
  <script>
- export default{
-    props:{
-        taskList: Array
+    // import http from '@/util/http-common.js';
+
+    export default{
+        props:{
+            taskList: Array
+        },
+
     }
- }
 </script>
 <style scoped>
+    .routerLink{
+        text-decoration: none;    
+    }
+
     #task{
         border-style: solid;
         border-width: 0px;
