@@ -33,10 +33,10 @@ public class TaskController {
         return ResponseEntity.ok("SUCCESS");
     }
     @GetMapping("/detail/{taskId}")
-    public ResponseEntity<TaskDetailRes> getTaskDetail(HttpServletRequest request, @PathVariable String taskId){
+    public ResponseEntity<TaskDetailRes> getTaskDetail(HttpServletRequest request, @PathVariable Long taskId){
 //        Long id = getUserId();
         Long id = 1L;
-        return ResponseEntity.ok(taskService.getTaskDetail(id));
+        return ResponseEntity.ok(taskService.getTaskDetail(taskId));
     }
 
     @PutMapping("/detail/{taskId}")

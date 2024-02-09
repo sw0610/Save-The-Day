@@ -16,7 +16,7 @@ public class TaskDetailRes {
     private Long taskId;
     private String title;
     private LocalDate dueDate;
-    private String importance;
+    private String priority;
     private String processStatus;
     private String content;
     private String emotion;
@@ -26,7 +26,7 @@ public class TaskDetailRes {
                 .taskId(task.getTaskId())
                 .title(task.getTitle())
                 .dueDate(task.getDueDate())
-                .importance(task.getImportance())
+                .priority(task.getPriority())
                 .processStatus(task.getProcessStatus())
                 .content(task.getContent())
                 .emotion(task.getEmotion())

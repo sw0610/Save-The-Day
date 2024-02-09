@@ -16,7 +16,7 @@ public class DailyTaskReq {
     private String title;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
-    private String importance;
+    private String priority;
     private String processStatus;
     private String content;
     private String emotion;

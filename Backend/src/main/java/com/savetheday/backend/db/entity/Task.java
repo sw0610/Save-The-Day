@@ -4,9 +4,6 @@ import com.savetheday.backend.dto.request.DailyTaskReq;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +41,7 @@ public class Task {
     private String processStatus;
 
     @Column(nullable = false, length = 15)
-    private String importance;
+    private String priority;
 
     @Column(length = 15)
     private String emotion;
@@ -56,7 +53,7 @@ public class Task {
                 .content(req.getContent())
                 .dueDate(req.getDueDate())
                 .processStatus(req.getProcessStatus())
-                .importance(req.getImportance())
+                .priority(req.getPriority())
                 .build();
     }
 
@@ -65,7 +62,7 @@ public class Task {
         this.content = req.getContent();
         this.dueDate = req.getDueDate();
         this.processStatus = req.getProcessStatus();
-        this.importance = req.getImportance();
+        this.priority = req.getPriority();
         this.emotion = req.getEmotion();
     }
 

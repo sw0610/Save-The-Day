@@ -14,7 +14,7 @@ public class DailyTaskRes {
     private Long taskId;
     private String title;
     private String processStatus;
-    private String importance;
+    private String priority;
     private String emotion;
 
     public static DailyTaskRes toDailyTaskRes(Task task){
@@ -22,7 +22,7 @@ public class DailyTaskRes {
                 .taskId(task.getTaskId())
                 .title(task.getTitle())
                 .processStatus(task.getProcessStatus())
-                .importance(task.getImportance())
+                .priority(task.getPriority())
                 .emotion(task.getEmotion())
                 .build();
     }
