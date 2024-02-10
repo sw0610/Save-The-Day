@@ -1,5 +1,6 @@
 package com.savetheday.backend.db.entity;
 
+import com.savetheday.backend.dto.request.SignInMemberReq;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +25,12 @@ public class Member {
     private String password;
     @Column(length = 15, nullable = false)
     private String nickname;
+
+    public static Member toMember(SignInMemberReq req){
+        return Member.builder()
+                .email(req.getEmail())
+                .password(req.getPassword())
+                .nickname(req.getNickname())
+                .build();
+    }
 }
