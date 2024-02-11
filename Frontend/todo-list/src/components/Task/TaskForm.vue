@@ -56,7 +56,15 @@
                     </div>                
             </div>
         </div>
-        <button id="submitBtn" :disabled="!isFormValid" @click="postTask">저장</button>
+        <div v-if="this.$route.params.taskId" id="update">
+            <button id="deleteBtn" @click="deleteTask">
+                <img id="deleteImg" src="@/assets/icon/delete_icon.svg"/>
+            </button>
+            <button id="updateBtn" :disabled="!isFormValid" @click="postTask">저장</button>
+        </div>
+        <div v-else>
+            <button id="submitBtn" :disabled="!isFormValid" @click="postTask">저장</button>
+        </div>
     </div>
 </template>
 <script>
@@ -148,6 +156,11 @@ import http from "@/util/http-common.js"
                     content:this.formData.content
                 }).then(()=>this.$router.push(`/task`));
                 }
+
+            },
+            deleteTask(){
+                http.delete(`/task/detail/${this.$route.params.taskId}`)
+                .then(()=>this.$router.push(`/task`));
 
             }
         },
@@ -362,6 +375,51 @@ import http from "@/util/http-common.js"
         background-color: #A3A3B9;
         color: #FFFFFF;
     }
+
+    #update{
+        width: 85%;
+        position: fixed;
+        bottom: 32px; 
+        display: flex;
+        gap: 1em;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+
+
+    }
+
+    #deleteBtn{
+        height: 52px;
+        border-radius: 22.5px;
+        width: 52px;
+        background-color: #F7F7F7;
+        border: 1px solid #F19F9D;
+
+    }
+
+    #updateBtn{
+        height: 52px;
+        background-color: #F19F9D;
+        border-radius: 22.5px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        flex-grow: 1;  
+        /* width: calc(100% - 52px - 2em);  */
+        box-sizing: border-box;        
+
+    }
+
+    #updateBtn:disabled {
+        /* 유효하지 않은 경우의 스타일 */
+        border: 1px solid #A3A3B9;
+        background-color: #A3A3B9;
+        color: #FFFFFF;
+    }
+
     #emojiContainer{
         width: 100%;
         display: flex;
