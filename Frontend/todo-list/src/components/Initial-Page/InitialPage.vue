@@ -5,13 +5,21 @@
         </div>
 
         <div id="buttons">
-            <button id="signInBtn" class="btn">로그인</button>
+            <button id="signInBtn" class="btn" @click="goToSignUpPage">로그인</button>
             <button id="signUpBtn" class="btn">회원 가입</button>
         </div>
     </div>
 </template>
 <script>
-
+    export default {
+        methods: {
+            goToSignUpPage() {
+                this.$router.push({
+                path: '/sign-up',
+                });        
+            }
+        }
+    };
 </script>
 <style scoped>
     #logoPage{

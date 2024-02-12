@@ -5,12 +5,18 @@ import TaskApp from '../views/TaskApp'
 import TaskDetail from '../views/TaskDetailApp'
 import MonthlyCalendar from '../components/Task/MonthlyCalendar.vue'
 import InitialPageApp from '@/views/InitialPageApp.vue'
+import SignUpApp from '@/views/SignUpApp.vue'
+
 // import MonthlyCalendar from '../components/Task/TestVue.vue'
 
 const routes = [
     {
         path: "/", 
         component:InitialPageApp
+    },
+    {
+        path: "/sign-up", 
+        component:SignUpApp
     },
     {
         path: "/task", 
