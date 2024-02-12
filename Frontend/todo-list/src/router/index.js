@@ -4,9 +4,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TaskApp from '../views/TaskApp'
 import TaskDetail from '../views/TaskDetailApp'
 import MonthlyCalendar from '../components/Task/MonthlyCalendar.vue'
+import InitialPageApp from '@/views/InitialPageApp.vue'
 // import MonthlyCalendar from '../components/Task/TestVue.vue'
 
 const routes = [
+    {
+        path: "/", 
+        component:InitialPageApp
+    },
     {
         path: "/task", 
         name:"home",
