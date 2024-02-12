@@ -1,13 +1,11 @@
 package com.savetheday.backend.db.entity;
 
-import com.savetheday.backend.dto.request.SignInMemberReq;
+import com.savetheday.backend.dto.request.SignUpMemberReq;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,7 +24,7 @@ public class Member {
     @Column(length = 15, nullable = false)
     private String nickname;
 
-    public static Member toMember(SignInMemberReq req){
+    public static Member toMember(SignUpMemberReq req){
         return Member.builder()
                 .email(req.getEmail())
                 .password(req.getPassword())
