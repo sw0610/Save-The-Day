@@ -3,19 +3,25 @@
         <div>
             <div class="formComponent" id="taskTitle">
                 <div class="title">Title</div>
-                <div id="titleInputBox">
+                <div class="boxContainer" id="titleInputBox">
                     <input class="box" id="titleInput" v-model="formData.title" type="text" @focus="isTitleFocused=true" @blur="isTitleFocused=false">
-                    <img id="inputIcon" :src= "require(isTitleFocused ? '@/assets/icon/check_selected.svg':'@/assets/icon/check.svg')">
+                    <img class="iconImg" id="inputIcon" :src= "require(isTitleFocused ? '@/assets/icon/pencil_color.svg':'@/assets/icon/pencil_gray.svg')">
                 </div>
             </div>
             <div class="formComponent" id="date">
                 <div class="title">Date</div>
-                <button class="box"  @click="displayCalendar=true">{{ date.getFullYear() }}년 {{ date.getMonth()+1 }}월 {{ date.getDate() }}일</button>  
+                <div class="boxContainer">
+                    <img class="iconImg" id="calendarIcon" :src= "require(displayCalendar ? '@/assets/icon/calendar_color.svg':'@/assets/icon/calendar_gray.svg')">
+                    <button class="box" id="calenderSelect" @click="displayCalendar=true" @focus="displayCalendar=true" @blur="displayCalendar=false">
+                        {{ date.getFullYear() }}년 {{ date.getMonth()+1 }}월 {{ date.getDate() }}일
+                    </button>  
+                </div>
             </div>
             <MonthlyCalendar v-if="displayCalendar" :showDate=date :isForm="true" @closeCalendar="handleCloseCalendar" @selectedDate="dateSelect"/>
             <div  class="formComponent" id="importance">
                 <div class="title">Priority</div>
-                <div class="selectBox" :class="{ selectBoxOpen: isOpen }">
+                <div class="selectBox" :class="{ selectBoxOpen: isOpen }" >
+                    <img class="iconImg" :src= "require(isOpen ? '@/assets/icon/priority_color.svg':'@/assets/icon/priority_gray.svg')">
                     <button class="selectBoxLabel" :class="{ openLabel: isOpen }" @click="toggleDropdown">{{ selectedOption || '선택해주세요' }}</button>  
                     <ul v-show="isOpen" class="optionList">
                         <li class="optionItem" v-for="(importanceOpt, index) in importanceOpts" :key="index" @click="selectOption(importanceOpt)">{{ importanceOpt }}</li>
@@ -25,6 +31,7 @@
             <div class="formComponent" id="status">
                 <div class="title">Status</div>
                     <div class="selectBox" :class="{ selectStatusBoxOpen: isStatusOpen }">
+                        <img class="iconImg" :src= "require(isOpen ? '@/assets/icon/check_color.svg':'@/assets/icon/check_gray.svg')">
                         <button class="selectBoxLabel" :class="{ openStatusLabel: isStatusOpen }" @click="toggleStatusDropdown">{{ selectedStatusOption || '선택해주세요' }}</button>  
                         <ul v-show="isStatusOpen" class="optionList">
                             <li class="optionItem" v-for="(statusOpt, index) in statusOpts" :key="index" @click="selectStatusOption(statusOpt)">{{ statusOpt }}</li>
@@ -231,19 +238,24 @@ import http from "@/util/http-common.js"
         padding-left: 12px;
     }
 
-    #titleInputBox{
+    #calenderSelect{
+        padding-left:48px;
+    }
+
+    .boxContainer{
         position: relative;
     }
-    #inputIcon{
+
+    .iconImg{
         position: absolute;
         top:17px;
         left: 17px;
     }
 
-    #titleInput{
+    #titleInput, #dateBox{
         padding-left: 48px;
     }
-    #titleInput:focus-within, #contentInput:focus-within{
+    #titleInput:focus-within, #contentInput:focus-within, #calenderSelect:focus{
         outline: none !important;
         border-color: #F19F9D;
         color: #1B1C1F;
@@ -269,7 +281,7 @@ import http from "@/util/http-common.js"
         font-family: 'Noto Sans KR', sans-serif;
         font-weight: 500;
         font-size: 14px;
-        padding-left: 12px;
+        padding-left: 36px;
     /* cursor: pointer; */
 
         /* padding: 12px 17px; */
@@ -284,7 +296,7 @@ import http from "@/util/http-common.js"
         height: inherit;
         border: 0 none;
         outline: 0 none;
-        padding-left: 15px;
+        padding-left: 12px;
         background: transparent;
         position: static;
         cursor: pointer;
