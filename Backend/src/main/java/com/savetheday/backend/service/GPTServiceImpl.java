@@ -1,5 +1,6 @@
 package com.savetheday.backend.service;
 
+import com.google.gson.Gson;
 import com.savetheday.backend.config.GPTConfig;
 import com.savetheday.backend.db.entity.AIResult;
 import com.savetheday.backend.db.entity.Task;
@@ -9,6 +10,7 @@ import com.savetheday.backend.dto.request.DallEPromptReq;
 import com.savetheday.backend.dto.request.GPTPromptReq;
 import com.savetheday.backend.dto.response.DallEPromptRes;
 import com.savetheday.backend.dto.response.GPTPromptRes;
+import com.savetheday.backend.dto.response.ImageRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -69,14 +71,9 @@ public class GPTServiceImpl implements GPTService{
         return responseEntity.getBody();
     }
 
-    public DallEPromptRes getDallEResponse(HttpEntity<DallEPromptReq> req) {
-
-        return null;
-    }
-
 
     @Override
-    public String getGPTAnswer(String type, LocalDate date) throws URISyntaxException, IOException, InterruptedException {
+    public String getGPTAnswer(String type, LocalDate date) {
         System.out.println(type);
         String res = null;
 
@@ -91,7 +88,7 @@ public class GPTServiceImpl implements GPTService{
             );
         }
         else if(type.equals("fiction")){
-            res = getTodayFiction(date).getChoices().get(0).getText();
+            res = getTodayFiction(date);
             System.out.println(res);
             aiResultRepository.save(
                     AIResult.builder()
@@ -99,11 +96,13 @@ public class GPTServiceImpl implements GPTService{
                             .fiction(res)
                             .build()
             );
-        } else if (type.equals("image")) {
-
-            getTodayImage(date);
         }
         return res;
+    }
+
+    @Override
+    public ImageRes getDallEAnswer(LocalDate date) throws URISyntaxException, IOException, InterruptedException {
+        return getTodayImage(date);
     }
 
     public String makePrompt(LocalDate date) {
@@ -148,15 +147,15 @@ public class GPTServiceImpl implements GPTService{
         );
     }
 
-    public GPTPromptRes getTodayFiction(LocalDate today) {
+    public String getTodayFiction(LocalDate today) {
         String prompt =
-                "오늘 나는 다음과 같은 일들을 했어.\n"
-                        +"오늘 한 일- 그 일의 세부 내용, 그 일을 할 때의 감정\n"
-                        +"이 순서로 제시할 거야.\n"
-                        + makePrompt(today)
-                        +"이를 참고해서 짧은 소설을 써줘.";
+//                "오늘 나는 다음과 같은 일들을 했어.\n"
+//                        +"오늘 한 일- 그 일의 세부 내용, 그 일을 할 때의 감정\n"
+//                        +"이 순서로 제시할 거야.\n"
+                        makePrompt(today)+"\n"
+                        +"Refer to this, write a short fiction no more than 10 sentences";
 //                +"영어라면 한국말로 번역해서 줘";
-        return this.getGPTResponse(
+        GPTPromptRes res =  this.getGPTResponse(
                 this.buildGPTHttpEntity(
                         new GPTPromptReq(
                                 GPTConfig.MODEL_GPT,
@@ -168,16 +167,15 @@ public class GPTServiceImpl implements GPTService{
                         )
                 )
         );
+
+        return translateInKorean(res.getChoices().get(0).getText());
+
     }
 
-    public GPTPromptRes getImagePrompt(LocalDate today) {
+    public String translateInKorean(String fiction) {
         String prompt =
-                "오늘 나는 다음과 같은 일들을 했어.\n"
-                        +"오늘 한 일- 그 일의 세부 내용, 그 일을 할 때의 감정\n"
-                        +"이 순서로 제시할 거야.\n"
-                        + makePrompt(today)
-                        +"이게 영화 줄거리라고 생각하고 고양이가 주인공인 영화의 한 장면을 그려줘";
-//                +"영어라면 한국말로 번역해서 줘";
+                fiction+"\n"+
+                "Translate this into Korean. Very naturally.";
         return this.getGPTResponse(
                 this.buildGPTHttpEntity(
                         new GPTPromptReq(
@@ -189,28 +187,26 @@ public class GPTServiceImpl implements GPTService{
 
                         )
                 )
-        );
+        ).getChoices().get(0).getText();
     }
+
+
+
 
     public String getTodayMusic(LocalDate today) {
         return null;
     }
 
-    public String getTodayImage(LocalDate today) throws URISyntaxException, IOException, InterruptedException {
-        System.out.println("---------");
+    public Task getRandomFinishedTask(LocalDate date){
+        List<Task> tasks = taskRepository.findAllByMemberIdAndDueDateAndProcessStatus(1L, date, "Finished")
+                .orElse(new ArrayList<>());
+        return tasks.get((int) (Math.random()*tasks.size()));
+    }
+
+    public String getDallERes(String prompt) throws URISyntaxException, IOException, InterruptedException{
         HttpClient client = HttpClient.newHttpClient();
-
-        String prompt =
-//                "고양이가 주인공인 하나의 그림을 만들어줘.\n"
-//                        +"그림의 배경은 다음과 같은 일들을 기반으로 해.\n"
-//                "Draw a storybook illustration"
-                        makePrompt(today)+"\n"
-                                +"이게 영화 줄거리라고 생각하고 내용을 요약하고 그 장면을 고양이를 주인공으로 해서 그려줘";
-
-//                        +"Draw a scene that reminds me of what I did today";
         String promptEscape =prompt
                 .replace("\n", "\\n");
-        System.out.println(promptEscape);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("https://api.openai.com/v1/images/generations")) // DALL-E API URL
@@ -226,8 +222,36 @@ public class GPTServiceImpl implements GPTService{
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println(response.body());
-
         return response.body();
+
     }
+
+    public DallEPromptRes getImageData(String json){
+        Gson gson = new Gson();
+        DallEPromptRes res = gson.fromJson(json, DallEPromptRes.class);
+        return res;
+
+    }
+
+    public ImageRes getTodayImage(LocalDate date) throws URISyntaxException, IOException, InterruptedException {
+
+        Task task = getRandomFinishedTask(date);
+        String title = task.getTitle();
+        String emotion = task.getEmotion();
+
+        String prompt = "고양이가 "+emotion+"의 감정으로 "+title+"를 하고있는 모습";
+        String jsonRes = getDallERes(prompt);
+        DallEPromptRes res = getImageData(jsonRes);
+
+        System.out.println();
+
+        return ImageRes.builder()
+                .imgUrl(res.getData().get(0).getUrl())
+                .imgTask(title)
+                .imgEmotion(emotion)
+                .build();
+
+    }
+
+
 }

@@ -25,15 +25,22 @@ public class GPTController {
     private final GPTService gptService;
 
     @GetMapping("/answer")
-    public ResponseEntity<String> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) throws URISyntaxException, IOException, InterruptedException {
+    public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) throws URISyntaxException, IOException, InterruptedException {
         Long id = 1L;
-        System.out.println(type);
-        return ResponseEntity.ok(gptService.getGPTAnswer(type, date));
+
+        if(type.equals("image")){
+            return ResponseEntity.ok(gptService.getDallEAnswer(date));
+        } else {
+            return ResponseEntity.ok(gptService.getGPTAnswer(type, date));
+        }
     }
 
     @GetMapping("/test")
     public ResponseEntity<String> test() throws URISyntaxException, IOException, InterruptedException {
         return null;
     }
+
+//    @PostMapping("/answer")
+//    public ResponseEntity<String> createAnswerData(@RequestBody )
 
 }

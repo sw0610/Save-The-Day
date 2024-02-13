@@ -28,10 +28,9 @@ public class AIResult {
     private LocalDate taskDate;
     private String quote;
     private String imgUrl;
+    private String imgTask;
+    private String imgEmotion;
     private String fiction;
-
-
-
 
 
 }
