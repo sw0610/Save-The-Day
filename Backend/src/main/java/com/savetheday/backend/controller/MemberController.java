@@ -1,4 +1,4 @@
-package com.savetheday.backend.controller.Member;
+package com.savetheday.backend.controller;
 
 import com.savetheday.backend.dto.request.SignInMemberReq;
 import com.savetheday.backend.dto.request.SignUpMemberReq;
