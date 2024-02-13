@@ -64,9 +64,11 @@
             </div>
         </div>
         <div v-if="this.$route.params.taskId" id="update">
-            <button id="deleteBtn" @click="deleteTask">
+            <button id="deleteBtn" @click="deleteModal=true">
                 <img id="deleteImg" src="@/assets/icon/delete_icon.svg"/>
             </button>
+            <DeleteModal v-if="deleteModal"  @close="closeDeleteModal" />
+
             <button id="updateBtn" :disabled="!isFormValid" @click="postTask">저장</button>
         </div>
         <div v-else>
@@ -76,11 +78,14 @@
 </template>
 <script>
 import MonthlyCalendar from "./MonthlyCalendar.vue";
+import DeleteModal from "./DeleteModal.vue";
+
 import http from "@/util/http-common.js"
 
     export default{
         components: {
             MonthlyCalendar,
+            DeleteModal
         },
         data(){
             return{
@@ -102,7 +107,8 @@ import http from "@/util/http-common.js"
                     emotion:null
                 },
                 selectedEmotion: null,
-                date:new Date()
+                date:new Date(),
+                deleteModal:false
             };
         },
         methods: {
@@ -165,10 +171,8 @@ import http from "@/util/http-common.js"
                 }
 
             },
-            deleteTask(){
-                http.delete(`/task/detail/${this.$route.params.taskId}`)
-                .then(()=>this.$router.push(`/task`));
-
+            closeDeleteModal(){
+                this.deleteModal=false;
             }
         },
         computed:{
@@ -201,7 +205,7 @@ import http from "@/util/http-common.js"
         }
     };
 </script>
-<style>
+<style scoped>
     #form{
         position: relative;
         background-color: #F7F7F7;
@@ -415,6 +419,8 @@ import http from "@/util/http-common.js"
     #updateBtn{
         height: 52px;
         background-color: #F19F9D;
+        border: 1px solid #F19F9D;
+        color: #FFFFFF;
         border-radius: 22.5px;
         font-family: 'Noto Sans KR', sans-serif;
         font-weight: 500;
