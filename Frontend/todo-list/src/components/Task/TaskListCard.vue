@@ -1,18 +1,25 @@
- <template>
+<template>
     <div>
-    <div v-for="task in taskList" :key="task.id">
-        <router-link class="routerLink" :to="'/task/detail/'+task.taskId">
-            <div id="task" >
-                <div v-if="task.processStatus==='Not Started'" class="status" id="notStarted"></div>
-                <div v-if="task.processStatus==='In Progress'" class="status" id="inProgress"></div>
-                <div v-if="task.processStatus==='Finished'" class="status" id="finished"></div>
-
-                {{ task.title }}
-            </div>
-        </router-link>
+        <div v-for="task in taskList" :key="task.id">
+            <router-link class="routerLink" :to="'/task/detail/'+task.taskId">
+                <div class="task" :class="{ 'finished-task': task.processStatus === 'Finished' }">
+                    <div v-if="task.processStatus==='Not Started'" class="status" id="notStarted"></div>
+                    <div v-if="task.processStatus==='In Progress'" class="status" id="inProgress"></div>
+                    <div v-if="task.processStatus==='Finished'">
+                        <div v-if="task.emotion === null" class="status" id="finished">
+                            <img id="emoji" :src="require('@/assets/icon/check_filled.svg')" />
+                        </div>
+                        <div v-else class="status" id="finishedWithEmotion">
+                            <img id="emoji" :src="require('@/assets/icon/emoji/'+task.emotion+'_color.svg')" />
+                        </div>
+                    </div>
+                    {{ task.title }}
+                </div>
+            </router-link>
+        </div>
     </div>
-</div>
- </template>
+</template>
+
  <script>
     // import http from '@/util/http-common.js';
 
@@ -28,8 +35,8 @@
         text-decoration: none;    
     }
 
-    #task{
-        border-style: solid;
+    .task{
+       border-style: solid;
         border-width: 0px;
         background-color: #FFFFFF; 
         /* width: 100%; */
@@ -47,6 +54,7 @@
         margin-bottom: 10px;;
     }
     .status{
+        position: relative;
 
         width: 16px;
         height: 16px;
@@ -63,5 +71,24 @@
         border-radius: 50%;
         background-color: #FFBAB5;
     }
+    #finished{
+
+    }
+
+    #emoji{
+        width: 21px;
+        height: 21px;
+        margin-right: 20px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+    }
+
+    .finished-task {
+        background-color: #F7F7F7; 
+        border:1px solid #EAEAED;
+        color: #7E869E;
+    }   
 
 </style>
