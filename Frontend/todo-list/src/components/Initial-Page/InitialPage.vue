@@ -3,20 +3,27 @@
         <div id="logo">
             <img src="@/assets/logo.svg"/>
         </div>
-
         <div id="buttons">
+            <button id="signInBtn" class="btn" @click="goToTaskPage">시작하기</button>
+        </div>
+        <!-- <div id="buttons">
             <button id="signInBtn" class="btn" @click="goToSignUpPage">로그인</button>
             <button id="signUpBtn" class="btn">회원 가입</button>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
     export default {
         methods: {
-            goToSignUpPage() {
+            // goToSignUpPage() {
+            //     this.$router.push({
+            //     path: '/sign-up',
+            //     });        
+            // }
+            goToTaskPage(){
                 this.$router.push({
-                path: '/sign-up',
-                });        
+                    path:'/task'
+                });
             }
         }
     };
