@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<List<Task>> findAllByMemberIdAndDueDateAndProcessStatusOrderByCreatedAt(Long memberId, LocalDate date, String status);
+    Optional<List<Task>> findAllByMemberIdAndDueDateAndProcessStatus(Long memberId, LocalDate date, String status);
     Optional<Task> findById(Long taskId);
 
 }
