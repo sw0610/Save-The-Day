@@ -6,6 +6,8 @@ import TaskDetail from '../views/TaskDetailApp'
 import MonthlyCalendar from '../components/Task/MonthlyCalendar.vue'
 import InitialPageApp from '@/views/InitialPageApp.vue'
 import SignUpApp from '@/views/SignUpApp.vue'
+import WrapUpApp from '@/views/WrapUpApp.vue'
+import QuoteApp from '@/views/QuoteApp.vue'
 
 // import MonthlyCalendar from '../components/Task/TestVue.vue'
 
@@ -32,6 +34,14 @@ const routes = [
     {
         path: '/task/detail/:taskId', 
         component:TaskDetail
+    },
+    {
+        path: '/wrap-up/list', 
+        component:WrapUpApp
+    },
+    {
+        path: '/wrap-up/quote', 
+        component:QuoteApp
     },
     {
         path: '/calendar', 
