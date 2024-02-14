@@ -12,7 +12,7 @@
         </div>
         <div id="buttons">
                 <button class="btn" id="reGenerateBtn" @click="generateFiction">다시 만들기</button>
-                <button class="btn" id="saveBtn" @click="deleteTask">저장</button>
+                <button class="btn" id="saveBtn" @click="saveFiction">저장</button>
         </div>
     </div>
     
@@ -34,7 +34,6 @@ export default{
     methods:{
         generateFiction(){
             this.isLoading= true;
-            console.log(this.$route.query.date);
 
             http.get(`/open-ai/answer`, {
                 params: {
@@ -45,6 +44,13 @@ export default{
                 this.isLoading= false;
                 this.fictionContent = res.data;
             });
+        },
+        saveFiction(){
+            http.post(`/open-ai/answer`,{
+                date:this.$route.query.date,
+                type:"fiction",
+                fiction:this.fictionContent
+            }).then(()=>this.$router.push(`/task`));
         }
     },
 

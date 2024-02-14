@@ -73,6 +73,15 @@ export default{
 
             });
     
+        },
+        saveImage(){
+            http.post(`/open-ai/answer`,{
+                date:this.$route.query.date,
+                type:"image",
+                imgUrl:this.imgUrl,
+                title:this.imgTask,
+                emotion:this.emotion
+            }).then(()=>this.$router.push(`/task`));
         }
     },
 

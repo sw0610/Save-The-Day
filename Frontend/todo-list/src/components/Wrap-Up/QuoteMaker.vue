@@ -10,8 +10,8 @@
                 </div>            </div>
         </div>
         <div id="buttons">
-                <button class="btn" id="reGenerateBtn" @click="cancleDelete">다시 만들기</button>
-                <button class="btn" id="saveBtn" @click="deleteTask">저장</button>
+                <button class="btn" id="reGenerateBtn" @click="generateQuote">다시 만들기</button>
+                <button class="btn" id="saveBtn" @click="saveQuote">저장</button>
         </div>
     </div>
     
@@ -30,7 +30,28 @@ export default{
             isLoading: true
         };
     },
+    methods:{
+        generateQuote(){
+            this.isLoading= true;
 
+            http.get(`/open-ai/answer`, {
+                params: {
+                    type:"quote",
+                    date: this.$route.query.date
+                },
+            }).then(res => { 
+                this.isLoading= false;
+                this.quoteContent = res.data;
+            });
+        },
+        saveQuote(){
+            http.post(`/open-ai/answer`,{
+                date:this.$route.query.date,
+                type:"quote",
+                quote:this.quoteContent
+            }).then(()=>this.$router.push(`/task`));
+        }
+    },
     mounted(){
         this.isLoading= true;
 
