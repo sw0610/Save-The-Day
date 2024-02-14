@@ -1,5 +1,5 @@
 <template>
-    <div id="quoteComponent">
+    <div id="quoteComponent" @click="goToMaker">
         <div  class="formComponent">
             <div class="title" >오늘의 그림</div>
             <div id="content"> 🎨오늘의 그림 생성해보세요🎨 </div>
@@ -8,6 +8,33 @@
     
 </template>
 <script>
+export default{
+    data(){
+        return{
+            date:new Date()
+        }
+    },
+
+    methods:{
+        
+        goToMaker(){
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const krDate = new Date(this.date-offset)
+            const dateString = krDate.toISOString().slice(0, 10);
+            console.log(this.date);
+            this.$router.push({
+            path: '/wrap-up/image',
+            query: { date: dateString}
+        });        
+        }
+    },
+    mounted() {
+        this.emitter.on('send-date', (selectedDate) => {
+            this.date = new Date(selectedDate);
+        });
+    
+    }
+}
 </script>
 <style scoped>
     #quoteComponent{

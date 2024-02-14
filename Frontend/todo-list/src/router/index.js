@@ -8,6 +8,9 @@ import InitialPageApp from '@/views/InitialPageApp.vue'
 import SignUpApp from '@/views/SignUpApp.vue'
 import WrapUpApp from '@/views/WrapUpApp.vue'
 import QuoteApp from '@/views/QuoteApp.vue'
+import FictionApp from '@/views/FictionApp.vue'
+import ImageApp from '@/views/ImageApp.vue'
+
 
 // import MonthlyCalendar from '../components/Task/TestVue.vue'
 
@@ -42,6 +45,14 @@ const routes = [
     {
         path: '/wrap-up/quote', 
         component:QuoteApp
+    },
+    {
+        path: '/wrap-up/fiction', 
+        component:FictionApp
+    },
+    {
+        path: '/wrap-up/image', 
+        component:ImageApp
     },
     {
         path: '/calendar', 

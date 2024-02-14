@@ -59,16 +59,7 @@ export default {
 
     };
   },
-//   setup() {
-//     const days = ref(["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]);
-//     const zippedData = ref(
-//       days.value.map((day, index) => ({ day, date: this.dates.value[index] }))
-//     );
 
-//     return {
-//       zippedData,
-//     };
-//   },
   methods: {
     dateSelect(data) {
         

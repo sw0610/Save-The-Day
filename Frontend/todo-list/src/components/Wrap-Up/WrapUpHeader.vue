@@ -2,7 +2,7 @@
     <div class="header" id="header">
         <div id="titleBar">
             <img id="menu" src="@/assets/icon/left_icon.svg" @click="goBack">
-            <div id="title">{{ $route.query.date }}</div>
+            <div id="title">Wrap Up</div>
 
         </div>
     </div>
@@ -11,7 +11,8 @@
 export default {
     methods: {
         goBack() {
-            this.$router.go(-1);      
+
+            this.$router.push('/task');      
         }
     }
 };
@@ -19,7 +20,7 @@ export default {
 </script>
 <style scoped>
     .header{
-        background-color: #F7F7F7;
+        background-color: #ffbab5;
         /* padding-left: 32px;        
         padding-right: 32px; */
         display: grid;

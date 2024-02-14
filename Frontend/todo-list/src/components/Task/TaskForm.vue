@@ -413,7 +413,6 @@ import http from "@/util/http-common.js"
         width: 52px;
         background-color: #F7F7F7;
         border: 1px solid #F19F9D;
-
     }
 
     #updateBtn{
@@ -428,7 +427,6 @@ import http from "@/util/http-common.js"
         flex-grow: 1;  
         /* width: calc(100% - 52px - 2em);  */
         box-sizing: border-box;        
-
     }
 
     #updateBtn:disabled {

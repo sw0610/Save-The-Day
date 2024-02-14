@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="goto-buttons">
+      <!-- <div class="goto-buttons">
         <button type="button" class="btn prev-year" @click="navigateYear(-1)">
           Prev Year
         </button>
@@ -50,7 +50,7 @@
         <button type="button" class="btn next-year" @click="navigateYear(1)">
           Next Year
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

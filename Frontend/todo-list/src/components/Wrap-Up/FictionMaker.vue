@@ -1,16 +1,17 @@
 <template>
     <div id="quoteComponent">
         <div  class="formComponent">
-            <div class="title" >🍀 오늘의 명언 🍀</div>
+            <div class="title" >📖 오늘의 소설 📖</div>
             <div id="content"> 
-                <a v-if="isLoading===false">{{ quoteContent }}</a>
+                <a v-if="isLoading===false" id="fiction"> {{ this.fictionContent }} </a>
                 <div v-else id="loadingContainer">
                 <a id="loading">생성 중입니다<br>잠시만 기다려주세요</a>
                 <SpinnerMotion></SpinnerMotion>
-                </div>            </div>
+                </div>
+            </div>
         </div>
         <div id="buttons">
-                <button class="btn" id="reGenerateBtn" @click="cancleDelete">다시 만들기</button>
+                <button class="btn" id="reGenerateBtn" @click="generateFiction">다시 만들기</button>
                 <button class="btn" id="saveBtn" @click="deleteTask">저장</button>
         </div>
     </div>
@@ -26,23 +27,29 @@ export default{
     },
     data(){
         return{
-            quoteContent:'',
+            fictionContent:'',
             isLoading: true
         };
     },
+    methods:{
+        generateFiction(){
+            this.isLoading= true;
+            console.log(this.$route.query.date);
+
+            http.get(`/open-ai/answer`, {
+                params: {
+                    type:"fiction",
+                    date: this.$route.query.date
+                },
+            }).then(res => { 
+                this.isLoading= false;
+                this.fictionContent = res.data;
+            });
+        }
+    },
 
     mounted(){
-        this.isLoading= true;
-
-        http.get(`/open-ai/answer`, {
-            params: {
-                type:"quote",
-                date: this.$route.query.date
-            },
-        }).then(res => { 
-            this.isLoading= false;
-            this.quoteContent = res.data;
-        });
+        this.generateFiction();
     }
 
 }
@@ -81,11 +88,10 @@ export default{
         font-size: 16px;
         padding: 12px;
         justify-content: center; 
-
+        overflow-x: hidden;
+        max-height: 450px;
     }
-    #loadingContainer{
-    text-align:center;
-}
+
     #buttons{
         position: fixed;
         box-sizing:border-box;
@@ -102,6 +108,9 @@ export default{
         background-color: #F7F7F7;
         margin-bottom: 40px;
 
+    }
+    #loadingContainer{
+    text-align:center;
 
     }
 .btn{
@@ -130,4 +139,5 @@ export default{
     text-align:center;
     color: #A3A3B9;
 }
+
 </style>

@@ -9,16 +9,30 @@
 </template>
 <script>
 export default{
-    props: ['date'],
+    data(){
+        return{
+            date:new Date()
+        }
+    },
 
     methods:{
+        
         goToMaker(){
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const krDate = new Date(this.date-offset)
+            const dateString = krDate.toISOString().slice(0, 10);
             console.log(this.date);
             this.$router.push({
             path: '/wrap-up/quote',
-            query: { date: this.date}
+            query: { date: dateString}
         });        
         }
+    },
+    mounted() {
+        this.emitter.on('send-date', (selectedDate) => {
+            this.date = new Date(selectedDate);
+        });
+    
     }
 }
 </script>
