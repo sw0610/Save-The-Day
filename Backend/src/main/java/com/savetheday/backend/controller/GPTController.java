@@ -16,6 +16,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @CrossOrigin
 @RestController
@@ -42,13 +43,14 @@ public class GPTController {
         return null;
     }
     @GetMapping("/get-answer")
-    public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam String date) {
         Long id = 1L;
+        LocalDate localdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
 
         if(type.equals("image")){
-            return ResponseEntity.ok(gptService.getDallERes(date));
+            return ResponseEntity.ok(gptService.getDallERes(localdate));
         } else {
-            return ResponseEntity.ok(gptService.getGPTRes(type, date));
+            return ResponseEntity.ok(gptService.getGPTRes(type, localdate));
         }
     }
 

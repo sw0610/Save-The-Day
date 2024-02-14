@@ -12,7 +12,7 @@ export default {
     methods: {
         goBack() {
 
-            this.$router.push('/task');      
+            this.$router.go(-1);      
         }
     }
 };
@@ -20,7 +20,7 @@ export default {
 </script>
 <style scoped>
     .header{
-        background-color: #ffbab5;
+        background-color: #F7F7F7;
         /* padding-left: 32px;        
         padding-right: 32px; */
         display: grid;

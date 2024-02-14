@@ -25,8 +25,6 @@ export default{
 <style scoped>
     .header{
         background-color: #FFBAB5;
-        /* padding-left: 32px;        
-        padding-right: 32px; */
         display: grid;
         justify-items: center;
         align-items: center;

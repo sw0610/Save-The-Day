@@ -9,32 +9,44 @@
 </template>
 <script>
 export default{
-    data(){
-        return{
-            date:new Date()
-        }
-    },
-
+    props: ['date'],
     methods:{
-        
         goToMaker(){
-            const offset = new Date().getTimezoneOffset() * 60000;
-            const krDate = new Date(this.date-offset)
-            const dateString = krDate.toISOString().slice(0, 10);
             console.log(this.date);
             this.$router.push({
             path: '/wrap-up/image',
-            query: { date: dateString}
+            query: { date: this.date}
         });        
         }
-    },
-    mounted() {
-        this.emitter.on('send-date', (selectedDate) => {
-            this.date = new Date(selectedDate);
-        });
-    
     }
 }
+// export default{
+//     data(){
+//         return{
+//             date:new Date()
+//         }
+//     },
+
+//     methods:{
+        
+//         goToMaker(){
+//             const offset = new Date().getTimezoneOffset() * 60000;
+//             const krDate = new Date(this.date-offset)
+//             const dateString = krDate.toISOString().slice(0, 10);
+//             console.log(this.date);
+//             this.$router.push({
+//             path: '/wrap-up/image',
+//             query: { date: dateString}
+//         });        
+//         }
+//     },
+//     mounted() {
+//         this.emitter.on('send-date', (selectedDate) => {
+//             this.date = new Date(selectedDate);
+//         });
+    
+//     }
+// }
 </script>
 <style scoped>
     #quoteComponent{
