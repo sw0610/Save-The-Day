@@ -41,7 +41,7 @@ public class GPTController {
     public ResponseEntity<String> test() throws URISyntaxException, IOException, InterruptedException {
         return null;
     }
-    @GetMapping("/answer")
+    @GetMapping("/get-answer")
     public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) throws URISyntaxException, IOException, InterruptedException {
         Long id = 1L;
 
