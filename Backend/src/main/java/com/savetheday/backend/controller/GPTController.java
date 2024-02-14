@@ -42,7 +42,7 @@ public class GPTController {
         return null;
     }
     @GetMapping("/get-answer")
-    public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) throws URISyntaxException, IOException, InterruptedException {
+    public ResponseEntity<?> getGPTAnswer(@RequestParam String type, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         Long id = 1L;
 
         if(type.equals("image")){

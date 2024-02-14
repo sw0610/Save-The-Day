@@ -32,8 +32,16 @@ public class AIResult {
     private String imgEmotion;
     private String fiction;
 
-    public static void updateQuote(){
-
+    public void updateImg(String url, String task, String emotion){
+        this.imgEmotion = emotion;
+        this.imgTask=task;
+        this.imgUrl=url;
+    }
+    public void updateQuote(String quote){
+        this.quote = quote;
+    }
+    public void updateFiction(String fiction){
+        this.fiction = fiction;
     }
 
 

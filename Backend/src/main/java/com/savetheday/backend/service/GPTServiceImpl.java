@@ -97,29 +97,49 @@ public class GPTServiceImpl implements GPTService{
     @Override
     public void saveGPTAnswer(AIResReq req) {
         if(req.getType().equals("image")){
-            aiResultRepository.save(
-                    AIResult.builder()
-                            .taskDate(req.getDate())
-                            .imgUrl(req.getImgUrl())
-                            .imgTask(req.getTitle())
-                            .imgEmotion(req.getEmotion())
-                            .build()
-            );
+            AIResult aiResult = aiResultRepository.findByTaskDate(req.getDate()).orElse(null);
+            if(aiResult==null || aiResult.getImgUrl()==null){
+                aiResultRepository.save(
+                        AIResult.builder()
+                                .taskDate(req.getDate())
+                                .imgUrl(req.getImgUrl())
+                                .imgTask(req.getTitle())
+                                .imgEmotion(req.getEmotion())
+                                .build()
+                );
+            }else{
+                aiResult.updateImg(req.getImgUrl(), req.getTitle(), req.getEmotion());
+            }
+
+
 
         }else if(req.getType().equals("quote")){
-            aiResultRepository.save(
-                    AIResult.builder()
-                            .taskDate(req.getDate())
-                            .quote(req.getQuote())
-                            .build()
-            );
+            AIResult aiResult = aiResultRepository.findByTaskDate(req.getDate()).orElse(null);
+            if(aiResult==null || aiResult.getImgUrl()==null) {
+
+                aiResultRepository.save(
+                        AIResult.builder()
+                                .taskDate(req.getDate())
+                                .quote(req.getQuote())
+                                .build()
+                );
+            }else{
+                aiResult.updateQuote(req.getQuote());
+            }
         }else if(req.getType().equals("fiction")){
-            aiResultRepository.save(
-                    AIResult.builder()
-                            .taskDate(req.getDate())
-                            .fiction(req.getFiction())
-                            .build()
-            );
+            AIResult aiResult = aiResultRepository.findByTaskDate(req.getDate()).orElse(null);
+            if(aiResult==null || aiResult.getImgUrl()==null) {
+
+                aiResultRepository.save(
+                        AIResult.builder()
+                                .taskDate(req.getDate())
+                                .fiction(req.getFiction())
+                                .build()
+                );
+            }
+            else{
+                aiResult.updateFiction(req.getFiction());
+            }
         }
     }
 
@@ -137,14 +157,20 @@ public class GPTServiceImpl implements GPTService{
 
     @Override
     public String getGPTRes(String type, LocalDate date) {
+        System.out.println(date);
         AIResult aiResult = aiResultRepository.findByTaskDate(date).orElse(null);
-
-        if(type.equals("quote")){
-            return aiResult.getQuote();
-        }else if(type.equals("fiction")){
-            return aiResult.getFiction();
+        if(aiResult==null){
+            return null;
+        }else{
+            if (type.equals("quote")) {
+                return aiResult.getQuote();
+            } else {
+                System.out.println(aiResult.getFiction());
+                return aiResult.getFiction();
+            }
         }
-        return null;
+
+
     }
 
     public String makePrompt(LocalDate date) {

@@ -2,17 +2,25 @@
     <div id="quoteComponent" @click="goToMaker">
         <div  class="formComponent">
             <div class="title" >오늘의 소설</div>
-            <div id="content"> 📖오늘의 소설을 생성해보세요📖 </div>
+            <div v-if="hasData===false" id="content"> 📖오늘의 소설을 생성해보세요📖 </div>
+            <div v-else id="content"> {{ fiction }} </div>
+
         </div>
     </div>
     
 </template>
 <script>
+import http from '@/util/http-common.js';
+
 export default{
+
     // props: ['date'],
     data(){
         return{
-            date:new Date()
+            date:new Date(),
+            fiction:null,
+            dateString:null,
+            hasData:false
         }
     },
 
@@ -21,11 +29,11 @@ export default{
         goToMaker(){
             const offset = new Date().getTimezoneOffset() * 60000;
             const krDate = new Date(this.date-offset)
-            const dateString = krDate.toISOString().slice(0, 10);
+            this.dateString = krDate.toISOString().slice(0, 10);
             console.log(this.date);
             this.$router.push({
             path: '/wrap-up/fiction',
-            query: { date: dateString}
+            query: { date: this.dateString, hasData:this.hasData}
         });        
         }
     },
@@ -33,6 +41,26 @@ export default{
         this.emitter.on('send-date', (selectedDate) => {
             this.date = new Date(selectedDate);
         });
+        const offset = new Date().getTimezoneOffset() * 60000;
+            const krDate = new Date(this.date-offset)
+            this.dateString = krDate.toISOString().slice(0, 10);
+        http.get(`/open-ai/get-answer?type=fiction&date=`+this.dateString).then(res=>{
+            console.log(res);
+            if(res.data==""){
+                this.hasData=false;
+                console.log("sfsdfsddddddf")
+
+            }else{
+                console.log("sfsdfsdf")
+
+                console.log(res)
+                console.log(res.data)
+
+                this.hasData=true;
+                this.fiction = res.data;
+            }
+        })
+
     
     }
 }

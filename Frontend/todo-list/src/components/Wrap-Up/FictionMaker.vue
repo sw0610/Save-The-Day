@@ -55,7 +55,23 @@ export default{
     },
 
     mounted(){
-        this.generateFiction();
+        if(this.$route.query.hasData==false){
+            this.generateFiction();
+        }else{
+
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const krDate = new Date(new Date(this.$route.query.date)-offset)
+            const dateString = krDate.toISOString().slice(0, 10);
+
+            http.get(`/open-ai/get-answer?type=fiction&date=`+dateString).then(res=>{
+                this.isLoading=false;
+                this.fictionContent = res.data;
+            
+        })
+
+    
+    
+        }
     }
 
 }
