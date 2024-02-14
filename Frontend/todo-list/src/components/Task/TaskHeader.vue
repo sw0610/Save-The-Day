@@ -2,7 +2,7 @@
 
     <div class="header" id="header">
         <div id="titleBar">
-            <img id="menu" src="@/assets/icon/menu_bar.svg">
+            <img id="menu" src="@/assets/icon/smile.svg" @click="goToWrapUp">
             <div id="title">Todo List</div>
 
         </div>
@@ -10,7 +10,17 @@
 </template>
 <script>
 
+export default{
+    methods:{
+        goToWrapUp(){
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const krDate = new Date(new Date()-offset);
+            const dateString = krDate.toISOString().slice(0, 10);
+            this.$router.push("/wrap-up/list?date="+dateString);
+        }
+    }
 
+}
 </script>
 <style scoped>
     .header{
