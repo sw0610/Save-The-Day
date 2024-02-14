@@ -32,5 +32,9 @@ public class AIResult {
     private String imgEmotion;
     private String fiction;
 
+    public static void updateQuote(){
+
+    }
+
 
 }

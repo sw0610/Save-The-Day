@@ -1,5 +1,6 @@
 package com.savetheday.backend.service;
 
+import com.savetheday.backend.dto.request.AIResReq;
 import com.savetheday.backend.dto.request.DallEPromptReq;
 import com.savetheday.backend.dto.request.GPTPromptReq;
 import com.savetheday.backend.dto.response.ImageRes;
@@ -19,4 +20,9 @@ public interface GPTService {
     ImageRes getDallEAnswer(LocalDate date) throws URISyntaxException, IOException, InterruptedException;
 
 
+    void saveGPTAnswer(AIResReq req);
+
+    ImageRes getDallERes(LocalDate date);
+
+    String getGPTRes(String type, LocalDate date);
 }

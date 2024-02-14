@@ -6,6 +6,7 @@ import com.savetheday.backend.db.entity.AIResult;
 import com.savetheday.backend.db.entity.Task;
 import com.savetheday.backend.db.repository.AIResultRepository;
 import com.savetheday.backend.db.repository.TaskRepository;
+import com.savetheday.backend.dto.request.AIResReq;
 import com.savetheday.backend.dto.request.DallEPromptReq;
 import com.savetheday.backend.dto.request.GPTPromptReq;
 import com.savetheday.backend.dto.response.DallEPromptRes;
@@ -79,23 +80,11 @@ public class GPTServiceImpl implements GPTService{
 
         if(type.equals("quote")){
             res = getTodayQuote(date).getChoices().get(0).getText();
-            System.out.println(res);
-            aiResultRepository.save(
-                    AIResult.builder()
-                            .taskDate(date)
-                            .quote(res)
-                            .build()
-            );
+
         }
         else if(type.equals("fiction")){
             res = getTodayFiction(date);
-            System.out.println(res);
-            aiResultRepository.save(
-                    AIResult.builder()
-                            .taskDate(date)
-                            .fiction(res)
-                            .build()
-            );
+
         }
         return res;
     }
@@ -103,6 +92,59 @@ public class GPTServiceImpl implements GPTService{
     @Override
     public ImageRes getDallEAnswer(LocalDate date) throws URISyntaxException, IOException, InterruptedException {
         return getTodayImage(date);
+    }
+
+    @Override
+    public void saveGPTAnswer(AIResReq req) {
+        if(req.getType().equals("image")){
+            aiResultRepository.save(
+                    AIResult.builder()
+                            .taskDate(req.getDate())
+                            .imgUrl(req.getImgUrl())
+                            .imgTask(req.getTitle())
+                            .imgEmotion(req.getEmotion())
+                            .build()
+            );
+
+        }else if(req.getType().equals("quote")){
+            aiResultRepository.save(
+                    AIResult.builder()
+                            .taskDate(req.getDate())
+                            .quote(req.getQuote())
+                            .build()
+            );
+        }else if(req.getType().equals("fiction")){
+            aiResultRepository.save(
+                    AIResult.builder()
+                            .taskDate(req.getDate())
+                            .fiction(req.getFiction())
+                            .build()
+            );
+        }
+    }
+
+    @Override
+    public ImageRes getDallERes(LocalDate date) {
+        AIResult aiResult = aiResultRepository.findByTaskDate(date).orElse(null);
+
+        return ImageRes.builder()
+                        .imgUrl(aiResult.getImgUrl())
+                .imgEmotion(aiResult.getImgEmotion())
+                .imgTask(aiResult.getImgTask())
+                .build();
+
+    }
+
+    @Override
+    public String getGPTRes(String type, LocalDate date) {
+        AIResult aiResult = aiResultRepository.findByTaskDate(date).orElse(null);
+
+        if(type.equals("quote")){
+            return aiResult.getQuote();
+        }else if(type.equals("fiction")){
+            return aiResult.getFiction();
+        }
+        return null;
     }
 
     public String makePrompt(LocalDate date) {
@@ -243,7 +285,7 @@ public class GPTServiceImpl implements GPTService{
         String jsonRes = getDallERes(prompt);
         DallEPromptRes res = getImageData(jsonRes);
 
-        System.out.println();
+
 
         return ImageRes.builder()
                 .imgUrl(res.getData().get(0).getUrl())
