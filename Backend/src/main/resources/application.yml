@@ -3,8 +3,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/save_the_day?serverTimezone=Asia/Seoul
     username: root
-    password: 123456
+    password: root
   jpa:
     hibernate:
-#      ddl-auto:
+      ddl-auto: update
       show-sql: true
+gpt:
+  key: OPEN_AI_API_KEY
