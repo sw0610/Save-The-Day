@@ -9,4 +9,4 @@ spring:
       ddl-auto: update
       show-sql: true
 gpt:
-  key: OPEN_AI_API_KEY
+  key: "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"
